@@ -16,7 +16,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder(toBuilder = true)
-public class GroupRole extends BaseModel {
-    private UUID groupId;
+public class UserRole extends BaseModel {
+    private UUID userId;
     private UUID roleId;
 }

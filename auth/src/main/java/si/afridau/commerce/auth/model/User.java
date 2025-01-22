@@ -19,9 +19,9 @@ import si.afridau.commerce.auth.common.model.BaseModel;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Getter
 @Setter
@@ -42,16 +42,19 @@ public class User extends BaseModel implements UserDetails {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            name = "user_group",
+            name = "user_role",
             joinColumns = @JoinColumn(name = "userId"),
-            inverseJoinColumns = @JoinColumn(name = "groupId")
+            inverseJoinColumns = @JoinColumn(name = "roleId")
     )
-    private Set<Group> groups = new HashSet<>();
+    private Set<Role> roles = new HashSet<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-       return groups.stream()
-               .flatMap(group -> group.getRoles().stream())
+       return roles.stream()
+               .flatMap(role -> Stream.concat(
+                       Stream.of(new SimpleGrantedAuthority("ROLE_" + role.getName())),
+                       role.getPermissions().stream().map(permission -> new SimpleGrantedAuthority(permission.getName()))
+                       ))
                .collect(Collectors.toList());
     }
 

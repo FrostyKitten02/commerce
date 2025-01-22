@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -18,16 +19,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import si.afridau.commerce.auth.model.Group;
+import si.afridau.commerce.auth.model.Role;
 import si.afridau.commerce.auth.model.User;
-import si.afridau.commerce.auth.model.UserGroup;
+import si.afridau.commerce.auth.model.UserRole;
 import si.afridau.commerce.auth.repository.GroupRepo;
 import si.afridau.commerce.auth.repository.UserGroupRepo;
 import si.afridau.commerce.auth.repository.UserRepo;
 import si.afridau.commerce.auth.request.LoginRequest;
 import si.afridau.commerce.auth.request.RegisterRequest;
 import si.afridau.commerce.auth.service.JwtService;
-import org.springframework.security.core.context.SecurityContextHolder;
+
 @CrossOrigin
 @RestController
 @RequestMapping("auth")
@@ -60,7 +61,7 @@ public class AuthController {
             throw new IllegalArgumentException("Server error");
         }
 
-        Group defaultGroup = groupRepo.findByName(defaultGroupName).orElseThrow(() -> new IllegalArgumentException("Default group not found"));
+        Role defaultRole = groupRepo.findByName(defaultGroupName).orElseThrow(() -> new IllegalArgumentException("Default group not found"));
 
         if (!registerRequest.getPassword().equals(registerRequest.getPasswordRepeated())) {
             throw new IllegalArgumentException("Password mismatch");
@@ -82,8 +83,8 @@ public class AuthController {
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         userRepo.save(user);
 
-        UserGroup ug = new UserGroup();
-        ug.setGroupId(defaultGroup.getId());
+        UserRole ug = new UserRole();
+        ug.setRoleId(defaultRole.getId());
         ug.setUserId(user.getId());
         userGroupRepo.save(ug);
     }

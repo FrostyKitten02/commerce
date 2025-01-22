@@ -22,7 +22,7 @@ import java.util.function.Function;
 
 @Service
 public class JwtService {
-    private final String ROLES_CLAIM_TOKEN = "roles";
+    private final String AUTHORITIES_KEY = "auths";
     private final String securitySecretKey;
     private final long expirationTime;
 
@@ -38,7 +38,7 @@ public class JwtService {
     }
 
     public Collection<GrantedAuthority> extractAuthorities(String token) {
-         return extractClaims(token, ROLES_CLAIM_TOKEN, ArrayList.class)
+         return extractClaims(token, AUTHORITIES_KEY, ArrayList.class)
                  .stream()
                  .map(role -> new SimpleGrantedAuthority((String) role))
                  .toList();
@@ -46,7 +46,7 @@ public class JwtService {
 
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> extraClaims = new HashMap<>();
-        extraClaims.put(ROLES_CLAIM_TOKEN, userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList());
+        extraClaims.put(AUTHORITIES_KEY, userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList());
         return generateToken(extraClaims, userDetails);
     }
 

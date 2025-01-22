@@ -1,14 +1,20 @@
 package si.afridau.commerce.auth.model;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import org.springframework.security.core.GrantedAuthority;
 import si.afridau.commerce.auth.common.model.BaseModel;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -16,12 +22,15 @@ import si.afridau.commerce.auth.common.model.BaseModel;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder(toBuilder = true)
-public class Role extends BaseModel implements GrantedAuthority {
+public class Role extends BaseModel {
     private String name;
     private String description;
 
-    @Override
-    public String getAuthority() {
-        return name;
-    }
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "role_permission",
+            joinColumns = @JoinColumn(name = "roleId"),
+            inverseJoinColumns = @JoinColumn(name = "permissionId")
+    )
+    private Set<Permission> permissions = new HashSet<>();
 }
