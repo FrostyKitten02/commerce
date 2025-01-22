@@ -9,6 +9,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -18,6 +19,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import si.afridau.commerce.auth.service.JwtService;
 
 import java.io.IOException;
+import java.util.Collection;
 
 @Slf4j
 @Component
@@ -42,9 +44,10 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
         jwt = authHeader.substring(7);
         final String userEmail = jwtService.extractUsername(jwt);
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            //TODO remove fetching user from database, probably not needed?
             UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
             if (jwtService.isTokenValid(jwt, userDetails)) {
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, jwtService.extractAuthorities(jwt));
                 authToken.setDetails(
                         new WebAuthenticationDetailsSource()
                                 .buildDetails(request));

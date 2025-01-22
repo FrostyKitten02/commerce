@@ -7,10 +7,14 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,7 +22,7 @@ import java.util.function.Function;
 
 @Service
 public class JwtService {
-
+    private final String ROLES_CLAIM_TOKEN = "roles";
     private final String securitySecretKey;
     private final long expirationTime;
 
@@ -33,8 +37,17 @@ public class JwtService {
         return extractClaims(token, Claims::getSubject);
     }
 
+    public Collection<GrantedAuthority> extractAuthorities(String token) {
+         return extractClaims(token, ROLES_CLAIM_TOKEN, ArrayList.class)
+                 .stream()
+                 .map(role -> new SimpleGrantedAuthority((String) role))
+                 .toList();
+    }
+
     public String generateToken(UserDetails userDetails) {
-        return generateToken(new HashMap<>(), userDetails);
+        Map<String, Object> extraClaims = new HashMap<>();
+        extraClaims.put(ROLES_CLAIM_TOKEN, userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList());
+        return generateToken(extraClaims, userDetails);
     }
 
     public String generateToken(@NotNull Map<String, Object> extraClaims, UserDetails userDetails) {
@@ -63,6 +76,11 @@ public class JwtService {
     private <T> T extractClaims(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
+    }
+
+    private <T> T extractClaims(String token, String key, Class<T> type) {
+        final Claims claims = extractAllClaims(token);
+        return claims.get(key, type);
     }
 
     private Claims extractAllClaims(String token) {

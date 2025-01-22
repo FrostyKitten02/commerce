@@ -2,6 +2,10 @@ package si.afridau.commerce.auth.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,7 +18,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import si.afridau.commerce.auth.common.model.BaseModel;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -33,10 +40,19 @@ public class User extends BaseModel implements UserDetails {
     @Column
     private String password;
 
-    //TODO add roles to db
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_group",
+            joinColumns = @JoinColumn(name = "userId"),
+            inverseJoinColumns = @JoinColumn(name = "groupId")
+    )
+    private Set<Group> groups = new HashSet<>();
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("TEMP"));
+       return groups.stream()
+               .flatMap(group -> group.getRoles().stream())
+               .collect(Collectors.toList());
     }
 
     @Override
