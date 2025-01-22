@@ -88,10 +88,4 @@ public class AuthController {
         ug.setUserId(user.getId());
         userGroupRepo.save(ug);
     }
-
-    @GetMapping("/test")
-    public String test(@AuthenticationPrincipal UserDetails userDetails) {
-        return "TEST";
-    }
-
 }
