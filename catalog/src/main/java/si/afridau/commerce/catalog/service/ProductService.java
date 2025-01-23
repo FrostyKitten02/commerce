@@ -32,6 +32,12 @@ public class ProductService {
         return productRepo.findById(id).orElseThrow(() -> new ItemNotFoundException("Product not found by id"));
     }
 
+    public List<ProductDto> getProducts(List<UUID> ids) {
+        List<Product> products = productRepo.findAllById(ids);
+        return products.stream().map(productMapper::toProductDto).toList();
+    }
+
+
     public void updateProduct(@Valid UpdateProductReq body, @NotNull UUID id) {
         Product product = productRepo.findById(id).orElseThrow(() -> new ItemNotFoundException("Product not found by id"));
         productMapper.updateProduct(product, body.getProduct());

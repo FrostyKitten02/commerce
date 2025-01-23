@@ -11,12 +11,14 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import si.afridau.commerce.catalog.dto.ProductDto;
 import si.afridau.commerce.catalog.mapper.ProductMapper;
 import si.afridau.commerce.catalog.model.Product;
 import si.afridau.commerce.catalog.request.CreateProductReq;
@@ -26,6 +28,7 @@ import si.afridau.commerce.catalog.response.ProductListRes;
 import si.afridau.commerce.catalog.response.ResourceCreatedRes;
 import si.afridau.commerce.catalog.service.ProductService;
 
+import java.util.List;
 import java.util.UUID;
 
 //TODO add permissions for actions!!! don't only look for ADMIN role
@@ -55,7 +58,7 @@ public class ProductController {
 
     @GetMapping("{productId}")
     public GetProductRes getProduct(
-            @RequestParam @NotNull UUID productId
+            @PathVariable @NotNull UUID productId
     ) {
         Product product = productService.getProduct(productId);
         GetProductRes res = new GetProductRes();
@@ -63,11 +66,21 @@ public class ProductController {
         return res;
     }
 
+    @GetMapping
+    public GetProductRes getProducts(
+            @NotNull @RequestParam List<UUID> ids
+    ) {
+        List<ProductDto> dtos = productService.getProducts(ids);
+        GetProductRes res = new GetProductRes();
+        res.setProducts(dtos);
+        return res;
+    }
+
     @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("{productId}")
     public void updateProduct(
             @RequestBody @Valid UpdateProductReq body,
-            @RequestParam @NotNull UUID productId
+            @PathVariable @NotNull UUID productId
     ) {
         productService.updateProduct(body, productId);
     }
@@ -76,7 +89,7 @@ public class ProductController {
     @PutMapping("{productId}")
     public void replaceProduct(
             @RequestBody @Valid CreateProductReq body,
-            @RequestParam @NotNull UUID productId
+            @PathVariable @NotNull UUID productId
     ) {
         productService.replaceProduct(body, productId);
     }
@@ -84,7 +97,7 @@ public class ProductController {
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("{productId}")
     public void deleteProduct(
-            @RequestParam @NotNull UUID productId
+            @PathVariable @NotNull UUID productId
     ) {
         productService.deleteProduct(productId);
     }

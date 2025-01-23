@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableJpaAuditing
 @EnableMethodSecurity
 @EnableTransactionManagement
-@SpringBootApplication(scanBasePackages = {"si.afridau.commerce.cart", "si.afridau.commerce.auth"})
+@SpringBootApplication(scanBasePackages = {"si.afridau.commerce.cart", "si.afridau.commerce.auth", "si.afridau.commerce.exception"})
 public class CartApplication {
 
     public static void main(String[] args) {
