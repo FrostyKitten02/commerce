@@ -52,14 +52,20 @@ public class CartService {
 
         BigDecimal total = BigDecimal.ZERO;
         GetProductResDto res = catalogClientService.getProducts(cartDto.getCartProducts().stream().map(CartProductDto::getProductId).toList(), SecurityContextHolder.getContext().getAuthentication().getCredentials().toString());
+        if (res == null) {
+            return cartDto;
+        }
+
         List<CatalogProductDto> products = res.getProducts();
         for (CartProductDto cp : cartDto.getCartProducts()) {
             Optional<CatalogProductDto> prod = products.stream().filter(p -> p.getId().equals(cp.getProductId())).findFirst();
             if (prod.isEmpty()) {
+                //TODO dont throw but simply remove bad item from cart!
                 throw new ItemNotFoundException("Product in cart not found in catalog");
             }
             BigDecimal lineTotal = cp.getQuantity().multiply(prod.get().getPrice());
             cp.setLineTotal(lineTotal);
+            cp.setPrice(prod.get().getPrice());
             total = total.add(lineTotal);
         }
 
