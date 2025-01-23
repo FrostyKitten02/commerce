@@ -28,6 +28,7 @@ import si.afridau.commerce.auth.repository.UserGroupRepo;
 import si.afridau.commerce.auth.repository.UserRepo;
 import si.afridau.commerce.auth.request.LoginRequest;
 import si.afridau.commerce.auth.request.RegisterRequest;
+import si.afridau.commerce.auth.response.LoginResponse;
 import si.afridau.commerce.auth.service.JwtService;
 
 @CrossOrigin
@@ -45,7 +46,7 @@ public class AuthController {
     @Value("${constants.deafult-register-group}")
     private String defaultGroupName;
     @PostMapping("/login")
-    public void login(@RequestBody LoginRequest loginRequest, HttpServletRequest request, HttpServletResponse response) throws JsonProcessingException {
+    public LoginResponse login(@RequestBody LoginRequest loginRequest, HttpServletRequest request, HttpServletResponse response) throws JsonProcessingException {
         //TODO move logic to service
         Authentication authenticationRequest = UsernamePasswordAuthenticationToken.unauthenticated(loginRequest.getUsername(), loginRequest.getPassword());
         Authentication authentication = authenticationManager.authenticate(authenticationRequest);
@@ -54,6 +55,11 @@ public class AuthController {
         SecurityContextHolder.setContext(context);
         String token = jwtService.generateToken(userRepo.findByEmail(loginRequest.getUsername()).orElseThrow(() -> new IllegalCallerException("Missing user in db")));
         response.setHeader("Authorization", "Bearer " + token);
+
+        LoginResponse res = new LoginResponse();
+        res.setToken(token);
+
+        return res;
     }
 
     @PostMapping("/register")
