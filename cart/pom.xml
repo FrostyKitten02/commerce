@@ -8,17 +8,16 @@
         <version>3.4.1</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>si.afridau.commerce.catalog</groupId>
-    <artifactId>catalog</artifactId>
+    <groupId>si.afridau.commerce.cart</groupId>
+    <artifactId>cart</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>catalog</name>
-    <description>catalog</description>
+    <name>cart</name>
+    <description>cart</description>
 
     <properties>
         <java.version>21</java.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <authcommon.version>0.0.1-SNAPSHOT</authcommon.version>
-        <exceptions.version>0.0.1-SNAPSHOT</exceptions.version>
     </properties>
     <dependencies>
         <dependency>
@@ -122,12 +121,6 @@
             <groupId>si.afridau.commerce.auth</groupId>
             <artifactId>auth-common</artifactId>
             <version>${authcommon.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>si.afridau.commerce.exception</groupId>
-            <artifactId>exceptions</artifactId>
-            <version>${exceptions.version}</version>
         </dependency>
 
         <!-- Validators -->

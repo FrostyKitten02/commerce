@@ -90,7 +90,6 @@ public class ProductController {
         productService.deleteProduct(productId);
     }
 
-    @PermitAll
     @GetMapping("list")
     public ProductListRes searchProducts() {
         return productService.searchProducts();

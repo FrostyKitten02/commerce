@@ -6,13 +6,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import si.afridau.commerce.catalog.dto.ProductDto;
-import si.afridau.commerce.catalog.exceptions.implementation.ItemNotFoundException;
 import si.afridau.commerce.catalog.mapper.ProductMapper;
 import si.afridau.commerce.catalog.model.Product;
 import si.afridau.commerce.catalog.repository.ProductRepo;
 import si.afridau.commerce.catalog.request.CreateProductReq;
 import si.afridau.commerce.catalog.request.UpdateProductReq;
 import si.afridau.commerce.catalog.response.ProductListRes;
+import si.afridau.commerce.exception.implementation.ItemNotFoundException;
 
 import java.util.List;
 import java.util.UUID;

@@ -1,4 +1,4 @@
-package si.afridau.commerce.catalog.exceptions;
+package si.afridau.commerce.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

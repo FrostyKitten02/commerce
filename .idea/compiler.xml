@@ -8,6 +8,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="auth-common" />
+        <module name="exception-handling" />
         <module name="auth" />
       </profile>
       <profile name="Annotation profile for catalog" enabled="true">
@@ -21,6 +22,7 @@
           <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct/1.5.5.Final/mapstruct-1.5.5.Final.jar" />
         </processorPath>
         <module name="catalog" />
+        <module name="cart" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -31,8 +33,10 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="auth" options="-parameters" />
       <module name="auth-common" options="" />
+      <module name="cart" options="-parameters" />
       <module name="catalog" options="-parameters" />
       <module name="commerce" options="-parameters" />
+      <module name="exception-handling" options="" />
     </option>
   </component>
 </project>

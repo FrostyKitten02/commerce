@@ -12,7 +12,7 @@ import org.springframework.validation.beanvalidation.MethodValidationPostProcess
 @EnableJpaAuditing
 @EnableMethodSecurity
 @EnableTransactionManagement
-@SpringBootApplication(scanBasePackages = {"si.afridau.commerce.catalog", "si.afridau.commerce.auth"})
+@SpringBootApplication(scanBasePackages = {"si.afridau.commerce.catalog", "si.afridau.commerce.auth", "si.afridau.commerce.exception"})
 public class CatalogApplication {
 
     public static void main(String[] args) {

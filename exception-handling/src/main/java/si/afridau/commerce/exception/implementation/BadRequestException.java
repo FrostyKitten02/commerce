@@ -1,8 +1,7 @@
-package si.afridau.commerce.catalog.exceptions.implementation;
+package si.afridau.commerce.exception.implementation;
 
 import org.springframework.http.HttpStatus;
-import si.afridau.commerce.catalog.exceptions.CustomRuntimeException;
-
+import si.afridau.commerce.exception.CustomRuntimeException;
 
 public class BadRequestException extends CustomRuntimeException {
     public BadRequestException(String message) {
