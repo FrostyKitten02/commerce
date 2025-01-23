@@ -7,6 +7,6 @@ import java.util.UUID;
 
 @Getter
 @Setter
-public class ResourceCreatedResponse {
+public class ResourceCreatedRes {
     private UUID id;
 }

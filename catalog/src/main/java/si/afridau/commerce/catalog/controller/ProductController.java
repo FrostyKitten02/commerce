@@ -17,12 +17,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import si.afridau.commerce.catalog.dto.UpdateProductDto;
+import si.afridau.commerce.catalog.mapper.ProductMapper;
 import si.afridau.commerce.catalog.model.Product;
 import si.afridau.commerce.catalog.request.CreateProductReq;
 import si.afridau.commerce.catalog.request.UpdateProductReq;
-import si.afridau.commerce.catalog.response.ProductListResponse;
-import si.afridau.commerce.catalog.response.ResourceCreatedResponse;
+import si.afridau.commerce.catalog.response.GetProductRes;
+import si.afridau.commerce.catalog.response.ProductListRes;
+import si.afridau.commerce.catalog.response.ResourceCreatedRes;
 import si.afridau.commerce.catalog.service.ProductService;
 
 import java.util.UUID;
@@ -36,18 +37,30 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ProductController {
     private final ProductService productService;
+    private final ProductMapper productMapper;
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    public ResourceCreatedResponse createProduct(
+    public ResourceCreatedRes createProduct(
             @RequestBody @Valid CreateProductReq body, HttpServletResponse servletResponse
     ) {
         Product product = productService.createProduct(body);
 
         servletResponse.setStatus(HttpServletResponse.SC_CREATED);
 
-        ResourceCreatedResponse res = new ResourceCreatedResponse();
+        ResourceCreatedRes res = new ResourceCreatedRes();
         res.setId(product.getId());
+        return res;
+    }
+
+    @PermitAll
+    @GetMapping("{productId}")
+    public GetProductRes getProduct(
+            @RequestParam @NotNull UUID productId
+    ) {
+        Product product = productService.getProduct(productId);
+        GetProductRes res = new GetProductRes();
+        res.setProduct(productMapper.toProductDto(product));
         return res;
     }
 
@@ -79,7 +92,7 @@ public class ProductController {
 
     @PermitAll
     @GetMapping("list")
-    public ProductListResponse searchProducts() {
+    public ProductListRes searchProducts() {
         return productService.searchProducts();
     }
 

@@ -2,24 +2,20 @@ package si.afridau.commerce.catalog.service;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import si.afridau.commerce.catalog.dto.ProductDto;
-import si.afridau.commerce.catalog.dto.UpdateProductDto;
 import si.afridau.commerce.catalog.exceptions.implementation.ItemNotFoundException;
 import si.afridau.commerce.catalog.mapper.ProductMapper;
 import si.afridau.commerce.catalog.model.Product;
 import si.afridau.commerce.catalog.repository.ProductRepo;
 import si.afridau.commerce.catalog.request.CreateProductReq;
 import si.afridau.commerce.catalog.request.UpdateProductReq;
-import si.afridau.commerce.catalog.response.ProductListResponse;
+import si.afridau.commerce.catalog.response.ProductListRes;
 
 import java.util.List;
 import java.util.UUID;
-
-import static org.antlr.v4.runtime.tree.xpath.XPath.findAll;
 
 @Service
 @Validated
@@ -30,6 +26,10 @@ public class ProductService {
     public Product createProduct(@Valid CreateProductReq body) {
         Product product = productMapper.toModel(body.getProduct());
         return productRepo.save(product);
+    }
+
+    public Product getProduct(@NotNull UUID id) {
+        return productRepo.findById(id).orElseThrow(() -> new ItemNotFoundException("Product not found by id"));
     }
 
     public void updateProduct(@Valid UpdateProductReq body, @NotNull UUID id) {
@@ -47,9 +47,9 @@ public class ProductService {
         productRepo.deleteById(id);
     }
 
-    public ProductListResponse searchProducts() {
+    public ProductListRes searchProducts() {
         List<ProductDto> products = productRepo.findAll().stream().map(productMapper::toProductDto).toList();
-        ProductListResponse response = new ProductListResponse();
+        ProductListRes response = new ProductListRes();
         response.setProducts(products);
         return response;
     }
