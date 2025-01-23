@@ -6,6 +6,7 @@ import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -46,6 +47,7 @@ public class WebSecurity {
                             .requestMatchers("/docs").permitAll()
                             .requestMatchers("/docs.yaml").permitAll()
                             .requestMatchers("/products/list").permitAll()
+                            .requestMatchers(HttpMethod.GET,"/products/**").permitAll()
                             .anyRequest().authenticated();
                 })
                 //.authenticationManager(authenticationManager)

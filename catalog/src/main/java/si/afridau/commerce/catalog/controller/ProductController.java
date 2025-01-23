@@ -53,7 +53,6 @@ public class ProductController {
         return res;
     }
 
-    @PermitAll
     @GetMapping("{productId}")
     public GetProductRes getProduct(
             @RequestParam @NotNull UUID productId
