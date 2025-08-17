@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import si.afridau.commerce.catalog.client.storage.api.DefaultApi;
 import si.afridau.commerce.catalog.dto.ProductDto;
 import si.afridau.commerce.catalog.mapper.ProductMapper;
 import si.afridau.commerce.catalog.model.Product;
