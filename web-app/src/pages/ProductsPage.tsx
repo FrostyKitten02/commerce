@@ -1,8 +1,9 @@
-import {Button, Card, CardActions, CardContent, Container, Grid2, Link, Typography} from "@mui/material";
+import {Button, Card, CardActions, CardContent, CardMedia, Container, Grid2, Link, Typography, Box} from "@mui/material";
 import {useEffect, useState} from "react";
 import RequestUtil from "../util/RequestUtil";
 import {ProductDto, ProductListRes} from "../../client/catalog";
 import AddToCart from "../components/AddToCart";
+import {ImageUtil} from "../util/ImageUtil";
 
 const ProductsPage = () => {
     const [products, setProducts] = useState<ProductDto[]>([])
@@ -35,14 +36,21 @@ const ProductsPage = () => {
                                 flexDirection: 'column',
                             }}
                         >
-                            {/*<CardMedia*/}
-                            {/*    component="img"*/}
-                            {/*    sx={{*/}
-                            {/*        pt: '56.25%',*/}
-                            {/*    }}*/}
-                            {/*    image={product.image}*/}
-                            {/*    alt={product.name}*/}
-                            {/*/>*/}
+                            {product.pictureId && (
+                                <CardMedia
+                                    component="img"
+                                    sx={{
+                                        height: 200,
+                                        objectFit: 'cover'
+                                    }}
+                                    image={ImageUtil.getImageUrl(product.pictureId.toString()) || ''}
+                                    alt={product.name}
+                                    onError={(e) => {
+                                        // Hide image if it fails to load
+                                        (e.target as HTMLElement).style.display = 'none';
+                                    }}
+                                />
+                            )}
                             <CardContent sx={{ flexGrow: 1 }}>
                                 <Typography gutterBottom variant="h5" component="h2">
                                     {product.name}

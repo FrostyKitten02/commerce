@@ -4,7 +4,8 @@ export interface Config {
     baseUrl: {
         auth: string,
         catalog: string,
-        cart: string
+        cart: string,
+        storage: string
     }
 }
 
@@ -12,7 +13,8 @@ interface NullableConfig {
     baseUrl?: {
         auth?: string,
         catalog?: string,
-        cart?: string
+        cart?: string,
+        storage?: string
     }
 }
 
@@ -52,7 +54,8 @@ export class ConfigUtil {
         if (
             StringUtil.emptyOrNull(conf.baseUrl.auth) &&
             StringUtil.emptyOrNull(conf.baseUrl.cart) &&
-            StringUtil.emptyOrNull(conf.baseUrl.catalog)
+            StringUtil.emptyOrNull(conf.baseUrl.catalog) &&
+            StringUtil.emptyOrNull(conf.baseUrl.storage)
         ) {
             throw new Error("Missing base at least one base url")
         }

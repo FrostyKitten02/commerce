@@ -64,6 +64,27 @@ public class ProductService {
     public void updateProduct(@Valid UpdateProductReq body, @NotNull UUID id) {
         Product product = productRepo.findById(id).orElseThrow(() -> new ItemNotFoundException("Product not found by id"));
         productMapper.updateProduct(product, body.getProduct());
+        
+        // Handle optional file upload - only upload if file is provided
+        if (body.getFile() != null && !body.getFile().isEmpty()) {
+            try {
+                // Create temporary file from MultipartFile
+                File tempFile = File.createTempFile("product-update-", body.getFile().getOriginalFilename());
+                body.getFile().transferTo(tempFile);
+                
+                try {
+                    var uploadResponse = storageApi.uploadFile(tempFile);
+                    product.setPictureId(uploadResponse.getId());
+                } finally {
+                    // Clean up temporary file
+                    tempFile.delete();
+                }
+            } catch (Exception e) {
+                throw new RuntimeException("Failed to upload product file", e);
+            }
+        }
+        
+        productRepo.save(product);
     }
 
     public void replaceProduct(@Valid CreateProductReq body, @NotNull UUID id) {

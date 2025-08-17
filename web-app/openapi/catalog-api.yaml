@@ -66,18 +66,17 @@ paths:
       - product-controller
       operationId: updateProduct
       parameters:
+      - name: body
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/UpdateProductReq"
       - name: productId
         in: path
         required: true
         schema:
           type: string
           format: uuid
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/UpdateProductReq"
-        required: true
       responses:
         "200":
           description: OK
@@ -182,6 +181,9 @@ components:
       properties:
         product:
           $ref: "#/components/schemas/UpdateProductDto"
+        file:
+          type: string
+          format: binary
     GetProductRes:
       type: object
       properties:
@@ -205,6 +207,9 @@ components:
           type: string
         price:
           type: number
+        pictureId:
+          type: string
+          format: uuid
     ProductListRes:
       type: object
       properties:

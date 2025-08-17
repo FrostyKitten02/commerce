@@ -81,9 +81,9 @@ public class ProductController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PatchMapping("{productId}")
+    @PatchMapping(value = "{productId}", consumes = {"multipart/form-data"})
     public void updateProduct(
-            @RequestBody @Valid UpdateProductReq body,
+            @ModelAttribute @Valid UpdateProductReq body,
             @PathVariable @NotNull UUID productId
     ) {
         productService.updateProduct(body, productId);

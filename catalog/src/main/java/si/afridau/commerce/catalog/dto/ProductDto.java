@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -14,4 +15,5 @@ public class ProductDto extends BaseDto {
     private String name;
     private String description;
     private BigDecimal price;
+    private UUID pictureId;
 }

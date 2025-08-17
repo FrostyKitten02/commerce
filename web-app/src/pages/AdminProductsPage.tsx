@@ -23,6 +23,7 @@ import {Add, Logout, Edit, Delete} from '@mui/icons-material';
 import axios from 'axios';
 import RequestUtil from "../util/RequestUtil";
 import StorageUtil from "../util/StorageUtil";
+import {ImageUtil} from "../util/ImageUtil";
 import {useNavigate} from "react-router-dom";
 import {CreateProductDto, ProductDto, UpdateProductDto} from "../../client/catalog";
 
@@ -149,19 +150,32 @@ export default function AdminProductsPage() {
 
         try {
             if (editingProduct) {
-                // For updates, use UpdateProductDto
-                const updateProductReq = {
-                    product: {
-                        name: formData.name.trim(),
-                        description: formData.description.trim(),
-                        price: Number(formData.price)
-                    } as UpdateProductDto
+                // For updates, create FormData with dot notation for @ModelAttribute
+                const formDataToSend = new FormData();
+                
+                // Use dot notation for nested object properties
+                formDataToSend.append('product.name', formData.name.trim());
+                formDataToSend.append('product.description', formData.description.trim());
+                formDataToSend.append('product.price', formData.price);
+                
+                if (formData.file) {
+                    formDataToSend.append('file', formData.file);
+                }
+
+                const config = RequestUtil.createBaseAxiosRequestConfig();
+                config.headers = {
+                    ...config.headers,
+                    'Content-Type': 'multipart/form-data',
                 };
 
-                await RequestUtil.createProductsApi().updateProduct(
-                    editingProduct.id!,
-                    updateProductReq,
-                    RequestUtil.createBaseAxiosRequestConfig()
+                // Use direct axios call instead of generated client for multipart
+                const catalogApi = RequestUtil.createProductsApi();
+                const baseURL = (catalogApi as any).configuration?.basePath || 'http://localhost:8001/api';
+                
+                await axios.patch(
+                    `${baseURL}/products/${editingProduct.id}`,
+                    formDataToSend,
+                    config
                 );
                 setSuccess('Izdelek uspešno posodobljen');
             } else {
@@ -270,6 +284,23 @@ export default function AdminProductsPage() {
                     {products.map((product) => (
                         <Grid2 key={product.id} xs={12} sm={6} md={4}>
                             <Card>
+                                {product.pictureId && (
+                                    <Box
+                                        component="img"
+                                        src={ImageUtil.getImageUrl(product.pictureId.toString()) || ''}
+                                        alt={product.name}
+                                        sx={{
+                                            width: '100%',
+                                            height: 200,
+                                            objectFit: 'cover',
+                                            backgroundColor: 'grey.100'
+                                        }}
+                                        onError={(e) => {
+                                            // Hide image if it fails to load
+                                            (e.target as HTMLElement).style.display = 'none';
+                                        }}
+                                    />
+                                )}
                                 <CardContent>
                                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
                                         <Typography variant="h6" component="h2" sx={{ flexGrow: 1 }}>
@@ -363,24 +394,27 @@ export default function AdminProductsPage() {
                         sx={{ mb: 2 }}
                     />
                     
-                    {!editingProduct && (
-                        <Box sx={{ mb: 2 }}>
-                            <Typography variant="body2" sx={{ mb: 1 }}>
-                                Slika izdelka (opcijsko)
+                    <Box sx={{ mb: 2 }}>
+                        <Typography variant="body2" sx={{ mb: 1 }}>
+                            Slika izdelka (opcijsko)
+                        </Typography>
+                        <Input
+                            type="file"
+                            onChange={handleFileChange}
+                            inputProps={{ accept: 'image/*' }}
+                            fullWidth
+                        />
+                        {formData.file && (
+                            <Typography variant="caption" color="text.secondary" sx={{ mt: 1, display: 'block' }}>
+                                Izbrana datoteka: {formData.file.name}
                             </Typography>
-                            <Input
-                                type="file"
-                                onChange={handleFileChange}
-                                inputProps={{ accept: 'image/*' }}
-                                fullWidth
-                            />
-                            {formData.file && (
-                                <Typography variant="caption" color="text.secondary" sx={{ mt: 1, display: 'block' }}>
-                                    Izbrana datoteka: {formData.file.name}
-                                </Typography>
-                            )}
-                        </Box>
-                    )}
+                        )}
+                        {editingProduct && editingProduct.pictureId && (
+                            <Typography variant="caption" color="text.secondary" sx={{ mt: 1, display: 'block' }}>
+                                Trenutna slika: {editingProduct.pictureId}
+                            </Typography>
+                        )}
+                    </Box>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleCloseDialog} disabled={loading}>
