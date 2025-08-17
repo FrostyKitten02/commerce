@@ -27,6 +27,11 @@ const services = [
     name: 'cart',
     yamlFile: 'cart-api.yaml', 
     packageName: 'cart-client'
+  },
+  {
+    name: 'checkout',
+    yamlFile: 'checkout-api.yaml',
+    packageName: 'checkout-client'
   }
 ];
 

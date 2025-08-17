@@ -1,5 +1,6 @@
 package si.afridau.commerce.cart.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
@@ -28,6 +29,6 @@ public class Cart extends BaseModel {
     @NotNull
     private UUID userId;
 
-    @OneToMany(mappedBy = "cart", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "cart", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CartProduct> products;
 }

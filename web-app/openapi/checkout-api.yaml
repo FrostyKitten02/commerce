@@ -1,0 +1,125 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+- url: http://localhost:8004/api
+  description: Generated server url
+security:
+- bearerAuth: []
+paths:
+  /checkout/submit-cart:
+    post:
+      tags:
+      - checkout-controller
+      operationId: submitCart
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SubmitCartReq"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/OrderCreatedRes"
+  /checkout/orders:
+    get:
+      tags:
+      - checkout-controller
+      operationId: getUserOrders
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/OrderDto"
+components:
+  schemas:
+    SubmitCartReq:
+      required:
+      - cartId
+      - shippingAddress
+      - shippingCity
+      - shippingCountry
+      - shippingPostalCode
+      type: object
+      properties:
+        cartId:
+          type: string
+          format: uuid
+        shippingAddress:
+          type: string
+        shippingCity:
+          type: string
+        shippingPostalCode:
+          type: string
+        shippingCountry:
+          type: string
+    OrderCreatedRes:
+      type: object
+      properties:
+        orderId:
+          type: string
+          format: uuid
+    OrderDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        userId:
+          type: string
+          format: uuid
+        cartId:
+          type: string
+          format: uuid
+        shippingAddress:
+          type: string
+        shippingCity:
+          type: string
+        shippingPostalCode:
+          type: string
+        shippingCountry:
+          type: string
+        totalAmount:
+          type: number
+        orderItems:
+          type: array
+          items:
+            $ref: "#/components/schemas/OrderItemDto"
+    OrderItemDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        orderId:
+          type: string
+          format: uuid
+        productId:
+          type: string
+          format: uuid
+        productName:
+          type: string
+        productSku:
+          type: string
+        unitPrice:
+          type: number
+        quantity:
+          type: integer
+          format: int32
+        lineTotal:
+          type: number
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: bearerAuth
+      scheme: bearer
+      bearerFormat: JWT

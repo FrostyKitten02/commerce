@@ -25,6 +25,11 @@ const services = [
     name: 'cart',
     url: 'http://localhost:8002/api/docs.yaml',
     outputFile: 'cart-api.yaml'
+  },
+  {
+    name: 'checkout',
+    url: 'http://localhost:8004/api/docs.yaml',
+    outputFile: 'checkout-api.yaml'
   }
 ];
 

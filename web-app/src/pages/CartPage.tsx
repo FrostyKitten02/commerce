@@ -21,8 +21,10 @@ import {Delete, ShoppingCart} from '@mui/icons-material';
 import {CartDto, CartProductDto} from "../../client/cart";
 import RequestUtil from "../util/RequestUtil";
 import {ImageUtil} from "../util/ImageUtil";
+import {useNavigate} from 'react-router-dom';
 
 export default function CartPage() {
+    const navigate = useNavigate();
     const [cart, setCart] = useState<CartDto | null>(null);
     const [loading, setLoading] = useState(true);
     const [snackbar, setSnackbar] = useState<{
@@ -198,6 +200,7 @@ export default function CartPage() {
                             color="primary" 
                             size="large"
                             sx={{ minWidth: 150 }}
+                            onClick={() => navigate('/checkout')}
                         >
                             Proceed to Checkout
                         </Button>

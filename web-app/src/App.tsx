@@ -8,6 +8,7 @@ import {CssBaseline} from '@mui/material';
 import PageTemplate from "./template/PageTemplate";
 import ProductsPage from "./pages/ProductsPage";
 import CartPage from "./pages/CartPage";
+import CheckoutPage from "./pages/CheckoutPage";
 import LoginPage from "./pages/LoginPage";
 import AdminLoginPage from "./pages/AdminLoginPage";
 import AdminProductsPage from "./pages/AdminProductsPage";
@@ -38,6 +39,10 @@ function App() {
                     {
                         path: "cart",
                         element: <CartPage />
+                    },
+                    {
+                        path: "checkout",
+                        element: <CheckoutPage />
                     },
                     {
                         path: "log-in",
