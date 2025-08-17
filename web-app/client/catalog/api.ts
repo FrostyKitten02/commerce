@@ -66,6 +66,12 @@ export interface CreateProductReq {
      * @memberof CreateProductReq
      */
     'product': CreateProductDto;
+    /**
+     * 
+     * @type {File}
+     * @memberof CreateProductReq
+     */
+    'file'?: File;
 }
 /**
  * 
@@ -202,13 +208,13 @@ export const ProductControllerApiAxiosParamCreator = function (configuration?: C
     return {
         /**
          * 
-         * @param {CreateProductReq} createProductReq 
+         * @param {CreateProductReq} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createProduct: async (createProductReq: CreateProductReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'createProductReq' is not null or undefined
-            assertParamExists('createProduct', 'createProductReq', createProductReq)
+        createProduct: async (body: CreateProductReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'body' is not null or undefined
+            assertParamExists('createProduct', 'body', body)
             const localVarPath = `/products`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -225,14 +231,17 @@ export const ProductControllerApiAxiosParamCreator = function (configuration?: C
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            if (body !== undefined) {
+                for (const [key, value] of Object.entries(body)) {
+                    localVarQueryParameter[key] = value;
+                }
+            }
+
 
     
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(createProductReq, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -484,12 +493,12 @@ export const ProductControllerApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @param {CreateProductReq} createProductReq 
+         * @param {CreateProductReq} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createProduct(createProductReq: CreateProductReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ResourceCreatedRes>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createProduct(createProductReq, options);
+        async createProduct(body: CreateProductReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ResourceCreatedRes>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createProduct(body, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ProductControllerApi.createProduct']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -579,12 +588,12 @@ export const ProductControllerApiFactory = function (configuration?: Configurati
     return {
         /**
          * 
-         * @param {CreateProductReq} createProductReq 
+         * @param {CreateProductReq} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createProduct(createProductReq: CreateProductReq, options?: RawAxiosRequestConfig): AxiosPromise<ResourceCreatedRes> {
-            return localVarFp.createProduct(createProductReq, options).then((request) => request(axios, basePath));
+        createProduct(body: CreateProductReq, options?: RawAxiosRequestConfig): AxiosPromise<ResourceCreatedRes> {
+            return localVarFp.createProduct(body, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -652,12 +661,12 @@ export const ProductControllerApiFactory = function (configuration?: Configurati
 export interface ProductControllerApiInterface {
     /**
      * 
-     * @param {CreateProductReq} createProductReq 
+     * @param {CreateProductReq} body 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ProductControllerApiInterface
      */
-    createProduct(createProductReq: CreateProductReq, options?: RawAxiosRequestConfig): AxiosPromise<ResourceCreatedRes>;
+    createProduct(body: CreateProductReq, options?: RawAxiosRequestConfig): AxiosPromise<ResourceCreatedRes>;
 
     /**
      * 
@@ -725,13 +734,13 @@ export interface ProductControllerApiInterface {
 export class ProductControllerApi extends BaseAPI implements ProductControllerApiInterface {
     /**
      * 
-     * @param {CreateProductReq} createProductReq 
+     * @param {CreateProductReq} body 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ProductControllerApi
      */
-    public createProduct(createProductReq: CreateProductReq, options?: RawAxiosRequestConfig) {
-        return ProductControllerApiFp(this.configuration).createProduct(createProductReq, options).then((request) => request(this.axios, this.basePath));
+    public createProduct(body: CreateProductReq, options?: RawAxiosRequestConfig) {
+        return ProductControllerApiFp(this.configuration).createProduct(body, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

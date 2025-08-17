@@ -106,12 +106,12 @@ paths:
       tags:
       - product-controller
       operationId: createProduct
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/CreateProductReq"
+      parameters:
+      - name: body
+        in: query
         required: true
+        schema:
+          $ref: "#/components/schemas/CreateProductReq"
       responses:
         "200":
           description: OK
@@ -153,6 +153,9 @@ components:
       properties:
         product:
           $ref: "#/components/schemas/CreateProductDto"
+        file:
+          type: string
+          format: binary
     ResourceCreatedRes:
       type: object
       properties:

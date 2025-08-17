@@ -16,19 +16,21 @@ import {
     Alert,
     AppBar,
     Toolbar,
-    Chip
+    Chip,
+    Input
 } from '@mui/material';
 import {Add, Logout, Edit, Delete} from '@mui/icons-material';
+import axios from 'axios';
 import RequestUtil from "../util/RequestUtil";
 import StorageUtil from "../util/StorageUtil";
 import {useNavigate} from "react-router-dom";
-import {ProductDto} from "../../client/catalog";
+import {CreateProductDto, ProductDto, UpdateProductDto} from "../../client/catalog";
 
 interface ProductFormData {
     name: string;
     description: string;
     price: string;
-    quantity: string;
+    file?: File;
 }
 
 export default function AdminProductsPage() {
@@ -44,7 +46,7 @@ export default function AdminProductsPage() {
         name: '',
         description: '',
         price: '',
-        quantity: ''
+        file: undefined
     });
 
     useEffect(() => {
@@ -58,7 +60,7 @@ export default function AdminProductsPage() {
     const loadProducts = async () => {
         setLoading(true);
         try {
-            const response = await RequestUtil.createProductsApi().getAllProducts();
+            const response = await RequestUtil.createProductsApi().searchProducts();
             setProducts(response.data.products || []);
         } catch (error) {
             console.error('Error loading products:', error);
@@ -80,7 +82,7 @@ export default function AdminProductsPage() {
                 name: product.name || '',
                 description: product.description || '',
                 price: product.price?.toString() || '',
-                quantity: product.quantity?.toString() || ''
+                file: undefined
             });
         } else {
             setEditingProduct(null);
@@ -88,7 +90,7 @@ export default function AdminProductsPage() {
                 name: '',
                 description: '',
                 price: '',
-                quantity: ''
+                file: undefined
             });
         }
         setOpen(true);
@@ -103,7 +105,7 @@ export default function AdminProductsPage() {
             name: '',
             description: '',
             price: '',
-            quantity: ''
+            file: undefined
         });
     };
 
@@ -112,6 +114,14 @@ export default function AdminProductsPage() {
         setFormData(prev => ({
             ...prev,
             [name]: value
+        }));
+    };
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        setFormData(prev => ({
+            ...prev,
+            file: file
         }));
     };
 
@@ -128,10 +138,6 @@ export default function AdminProductsPage() {
             setError('Cena mora biti veljavno pozitivno število');
             return false;
         }
-        if (!formData.quantity || isNaN(Number(formData.quantity)) || Number(formData.quantity) < 0) {
-            setError('Količina mora biti veljavno pozitivno število ali 0');
-            return false;
-        }
         return true;
     };
 
@@ -142,24 +148,49 @@ export default function AdminProductsPage() {
         setError('');
 
         try {
-            const productData = {
-                name: formData.name.trim(),
-                description: formData.description.trim(),
-                price: Number(formData.price),
-                quantity: Number(formData.quantity)
-            };
-
             if (editingProduct) {
+                // For updates, use UpdateProductDto
+                const updateProductReq = {
+                    product: {
+                        name: formData.name.trim(),
+                        description: formData.description.trim(),
+                        price: Number(formData.price)
+                    } as UpdateProductDto
+                };
+
                 await RequestUtil.createProductsApi().updateProduct(
                     editingProduct.id!,
-                    productData,
+                    updateProductReq,
                     RequestUtil.createBaseAxiosRequestConfig()
                 );
                 setSuccess('Izdelek uspešno posodobljen');
             } else {
-                await RequestUtil.createProductsApi().createProduct(
-                    productData,
-                    RequestUtil.createBaseAxiosRequestConfig()
+                // For new products, create FormData with dot notation for @ModelAttribute
+                const formDataToSend = new FormData();
+                
+                // Use dot notation for nested object properties
+                formDataToSend.append('product.name', formData.name.trim());
+                formDataToSend.append('product.description', formData.description.trim());
+                formDataToSend.append('product.price', formData.price);
+                
+                if (formData.file) {
+                    formDataToSend.append('file', formData.file);
+                }
+
+                const config = RequestUtil.createBaseAxiosRequestConfig();
+                config.headers = {
+                    ...config.headers,
+                    'Content-Type': 'multipart/form-data',
+                };
+
+                // Use direct axios call instead of generated client for multipart
+                const catalogApi = RequestUtil.createProductsApi();
+                const baseURL = (catalogApi as any).configuration?.basePath || 'http://localhost:8001/api';
+                
+                const response = await axios.post(
+                    `${baseURL}/products`,
+                    formDataToSend,
+                    config
                 );
                 setSuccess('Izdelek uspešno dodan');
             }
@@ -174,7 +205,7 @@ export default function AdminProductsPage() {
         }
     };
 
-    const handleDelete = async (productId: number) => {
+    const handleDelete = async (productId: string) => {
         if (!window.confirm('Ali ste prepričani, da želite izbrisati ta izdelek?')) {
             return;
         }
@@ -267,16 +298,9 @@ export default function AdminProductsPage() {
                                         {product.description}
                                     </Typography>
                                     
-                                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                        <Typography variant="h6" color="primary">
-                                            €{product.price?.toFixed(2)}
-                                        </Typography>
-                                        <Chip 
-                                            label={`Zaloga: ${product.quantity}`}
-                                            color={product.quantity! > 0 ? "success" : "error"}
-                                            size="small"
-                                        />
-                                    </Box>
+                                    <Typography variant="h6" color="primary">
+                                        €{product.price?.toFixed(2)}
+                                    </Typography>
                                 </CardContent>
                             </Card>
                         </Grid2>
@@ -338,18 +362,25 @@ export default function AdminProductsPage() {
                         inputProps={{ min: 0, step: 0.01 }}
                         sx={{ mb: 2 }}
                     />
-                    <TextField
-                        margin="dense"
-                        name="quantity"
-                        label="Količina"
-                        type="number"
-                        fullWidth
-                        variant="outlined"
-                        value={formData.quantity}
-                        onChange={handleChange}
-                        required
-                        inputProps={{ min: 0 }}
-                    />
+                    
+                    {!editingProduct && (
+                        <Box sx={{ mb: 2 }}>
+                            <Typography variant="body2" sx={{ mb: 1 }}>
+                                Slika izdelka (opcijsko)
+                            </Typography>
+                            <Input
+                                type="file"
+                                onChange={handleFileChange}
+                                inputProps={{ accept: 'image/*' }}
+                                fullWidth
+                            />
+                            {formData.file && (
+                                <Typography variant="caption" color="text.secondary" sx={{ mt: 1, display: 'block' }}>
+                                    Izbrana datoteka: {formData.file.name}
+                                </Typography>
+                            )}
+                        </Box>
+                    )}
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleCloseDialog} disabled={loading}>

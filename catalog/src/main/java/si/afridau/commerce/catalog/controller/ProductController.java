@@ -10,6 +10,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import si.afridau.commerce.catalog.client.storage.api.DefaultApi;
 import si.afridau.commerce.catalog.dto.ProductDto;
 import si.afridau.commerce.catalog.mapper.ProductMapper;
@@ -42,11 +44,12 @@ import java.util.UUID;
 public class ProductController {
     private final ProductService productService;
     private final ProductMapper productMapper;
+    private final DefaultApi storageApi;
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping
+    @PostMapping(consumes = {"multipart/form-data"})
     public ResourceCreatedRes createProduct(
-            @RequestBody @Valid CreateProductReq body, HttpServletResponse servletResponse
+            @ModelAttribute @Valid CreateProductReq body, HttpServletResponse servletResponse
     ) {
         Product product = productService.createProduct(body);
 
@@ -107,5 +110,30 @@ public class ProductController {
     public ProductListRes searchProducts() {
         return productService.searchProducts();
     }
+
+//    @PreAuthorize("hasRole('ADMIN')")
+//    @PostMapping("{productId}/files")
+//    public ResourceCreatedRes uploadProductFile(
+//            @PathVariable @NotNull UUID productId,
+//            @RequestParam("file") MultipartFile file,
+//            HttpServletResponse servletResponse
+//    ) {
+//        // Verify product exists
+//        productService.getProduct(productId);
+//
+//        try {
+//            // Upload file to storage service
+//            var uploadResponse = storageApi.uploadFile(file.getResource());
+//
+//            servletResponse.setStatus(HttpServletResponse.SC_CREATED);
+//
+//            ResourceCreatedRes res = new ResourceCreatedRes();
+//            res.setId(uploadResponse.getId());
+//            return res;
+//
+//        } catch (Exception e) {
+//            throw new RuntimeException("Failed to upload file", e);
+//        }
+//    }
 
 }

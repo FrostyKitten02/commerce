@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
+import si.afridau.commerce.catalog.client.storage.api.DefaultApi;
 import si.afridau.commerce.catalog.dto.ProductDto;
 import si.afridau.commerce.catalog.mapper.ProductMapper;
 import si.afridau.commerce.catalog.model.Product;
@@ -14,6 +15,7 @@ import si.afridau.commerce.catalog.request.UpdateProductReq;
 import si.afridau.commerce.catalog.response.ProductListRes;
 import si.afridau.commerce.exception.implementation.ItemNotFoundException;
 
+import java.io.File;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,8 +25,29 @@ import java.util.UUID;
 public class ProductService {
     private final ProductRepo productRepo;
     private final ProductMapper productMapper;
+    private final DefaultApi storageApi;
+
     public Product createProduct(@Valid CreateProductReq body) {
         Product product = productMapper.toModel(body.getProduct());
+
+        if (body.getFile() != null && !body.getFile().isEmpty()) {
+            try {
+                // Create temporary file from MultipartFile
+                File tempFile = File.createTempFile("product-upload-", body.getFile().getOriginalFilename());
+                body.getFile().transferTo(tempFile);
+                
+                try {
+                    var uploadResponse = storageApi.uploadFile(tempFile);
+                    product.setPictureId(uploadResponse.getId());
+                } finally {
+                    // Clean up temporary file
+                    tempFile.delete();
+                }
+            } catch (Exception e) {
+                throw new RuntimeException("Failed to upload product file", e);
+            }
+        }
+
         return productRepo.save(product);
     }
 
