@@ -1,19 +1,98 @@
 version: '3.8'
 
 services:
-  # PostgreSQL Database
-  postgres:
+  # Auth Service PostgreSQL
+  auth-postgres:
     image: postgres:15-alpine
-    container_name: commerce-postgres
+    container_name: commerce-auth-postgres
     environment:
-      POSTGRES_DB: commerce
+      POSTGRES_DB: auth_ws
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: admin
     ports:
-      - "5432:5432"
+      - "5430:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+      - auth_postgres_data:/var/lib/postgresql/data
+    networks:
+      - commerce-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Catalog Service PostgreSQL
+  catalog-postgres:
+    image: postgres:15-alpine
+    container_name: commerce-catalog-postgres
+    environment:
+      POSTGRES_DB: catalog_ws
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+    ports:
+      - "5431:5432"
+    volumes:
+      - catalog_postgres_data:/var/lib/postgresql/data
+    networks:
+      - commerce-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Cart Service PostgreSQL
+  cart-postgres:
+    image: postgres:15-alpine
+    container_name: commerce-cart-postgres
+    environment:
+      POSTGRES_DB: cart_ws
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+    ports:
+      - "5433:5432"
+    volumes:
+      - cart_postgres_data:/var/lib/postgresql/data
+    networks:
+      - commerce-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Checkout Service PostgreSQL
+  checkout-postgres:
+    image: postgres:15-alpine
+    container_name: commerce-checkout-postgres
+    environment:
+      POSTGRES_DB: checkout_ws
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+    ports:
+      - "5434:5432"
+    volumes:
+      - checkout_postgres_data:/var/lib/postgresql/data
+    networks:
+      - commerce-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Storage Service PostgreSQL
+  storage-postgres:
+    image: postgres:15-alpine
+    container_name: commerce-storage-postgres
+    environment:
+      POSTGRES_DB: storage_ws
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+    ports:
+      - "5435:5432"
+    volumes:
+      - storage_postgres_data:/var/lib/postgresql/data
     networks:
       - commerce-network
     healthcheck:
@@ -28,17 +107,10 @@ services:
       context: ./auth
       dockerfile: Dockerfile
     container_name: commerce-auth
-    environment:
-      - SPRING_PROFILES_ACTIVE=docker
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/auth_ws
-      - SPRING_DATASOURCE_USERNAME=postgres
-      - SPRING_DATASOURCE_PASSWORD=admin
-      - SECURITY_CONSTANT_SECRET=6Cfx1grNGGekPmQfCw93bm6JyDCvEd6BDuieHEUCDbqxHV0iYid7YtQjnzryhKB3Hy6Mi137h3AuqqeE1dyvwxg48Fmw5rSErHbhEWGUZMq9nMduh3ykXUPK9EAFMSu6
-      - SECURITY_CONSTANT_EXPIRATIONTIME=86400000
     ports:
       - "8000:8000"
     depends_on:
-      postgres:
+      auth-postgres:
         condition: service_healthy
     networks:
       - commerce-network
@@ -50,18 +122,10 @@ services:
       context: ./catalog
       dockerfile: Dockerfile
     container_name: commerce-catalog
-    environment:
-      - SPRING_PROFILES_ACTIVE=docker
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/catalog_ws
-      - SPRING_DATASOURCE_USERNAME=postgres
-      - SPRING_DATASOURCE_PASSWORD=admin
-      - SECURITY_CONSTANT_SECRET=6Cfx1grNGGekPmQfCw93bm6JyDCvEd6BDuieHEUCDbqxHV0iYid7YtQjnzryhKB3Hy6Mi137h3AuqqeE1dyvwxg48Fmw5rSErHbhEWGUZMq9nMduh3ykXUPK9EAFMSu6
-      - SECURITY_CONSTANT_EXPIRATIONTIME=86400000
-      - STORAGE_WS_BASE_PATH=http://storage-service:8003/api
     ports:
       - "8001:8001"
     depends_on:
-      postgres:
+      catalog-postgres:
         condition: service_healthy
       storage-service:
         condition: service_started
@@ -75,18 +139,10 @@ services:
       context: ./cart
       dockerfile: Dockerfile
     container_name: commerce-cart
-    environment:
-      - SPRING_PROFILES_ACTIVE=docker
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/cart_ws
-      - SPRING_DATASOURCE_USERNAME=postgres
-      - SPRING_DATASOURCE_PASSWORD=admin
-      - SECURITY_CONSTANT_SECRET=6Cfx1grNGGekPmQfCw93bm6JyDCvEd6BDuieHEUCDbqxHV0iYid7YtQjnzryhKB3Hy6Mi137h3AuqqeE1dyvwxg48Fmw5rSErHbhEWGUZMq9nMduh3ykXUPK9EAFMSu6
-      - SECURITY_CONSTANT_EXPIRATIONTIME=86400000
-      - CATALOG_WS_BASE_PATH=http://catalog-service:8001/api
     ports:
       - "8002:8002"
     depends_on:
-      postgres:
+      cart-postgres:
         condition: service_healthy
       catalog-service:
         condition: service_started
@@ -100,19 +156,10 @@ services:
       context: ./checkout
       dockerfile: Dockerfile
     container_name: commerce-checkout
-    environment:
-      - SPRING_PROFILES_ACTIVE=docker
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/checkout_ws
-      - SPRING_DATASOURCE_USERNAME=postgres
-      - SPRING_DATASOURCE_PASSWORD=admin
-      - SECURITY_CONSTANT_SECRET=6Cfx1grNGGekPmQfCw93bm6JyDCvEd6BDuieHEUCDbqxHV0iYid7YtQjnzryhKB3Hy6Mi137h3AuqqeE1dyvwxg48Fmw5rSErHbhEWGUZMq9nMduh3ykXUPK9EAFMSu6
-      - SECURITY_CONSTANT_EXPIRATIONTIME=86400000
-      - CART_WS_BASE_PATH=http://cart-service:8002/api
-      - CATALOG_WS_BASE_PATH=http://catalog-service:8001/api
     ports:
       - "8004:8004"
     depends_on:
-      postgres:
+      checkout-postgres:
         condition: service_healthy
       cart-service:
         condition: service_started
@@ -129,18 +176,18 @@ services:
       dockerfile: Dockerfile
     container_name: commerce-storage
     environment:
-      - GIN_MODE=release
-      - PORT=8003
-      - DB_HOST=postgres
-      - DB_PORT=5432
-      - DB_NAME=storage_ws
-      - DB_USER=postgres
-      - DB_PASSWORD=admin
-      - JWT_SECRET=6Cfx1grNGGekPmQfCw93bm6JyDCvEd6BDuieHEUCDbqxHV0iYid7YtQjnzryhKB3Hy6Mi137h3AuqqeE1dyvwxg48Fmw5rSErHbhEWGUZMq9nMduh3ykXUPK9EAFMSu6
+      GIN_MODE: release
+      PORT: 8003
+      DB_HOST: storage-postgres
+      DB_PORT: 5432
+      DB_NAME: storage_ws
+      DB_USER: postgres
+      DB_PASSWORD: admin
+      JWT_SECRET: 6Cfx1grNGGekPmQfCw93bm6JyDCvEd6BDuieHEUCDbqxHV0iYid7YtQjnzryhKB3Hy6Mi137h3AuqqeE1dyvwxg48Fmw5rSErHbhEWGUZMq9nMduh3ykXUPK9EAFMSu6
     ports:
       - "8003:8003"
     depends_on:
-      postgres:
+      storage-postgres:
         condition: service_healthy
     volumes:
       - storage_uploads:/root/uploads
@@ -171,7 +218,15 @@ networks:
     driver: bridge
 
 volumes:
-  postgres_data:
+  auth_postgres_data:
+    driver: local
+  catalog_postgres_data:
+    driver: local
+  cart_postgres_data:
+    driver: local
+  checkout_postgres_data:
+    driver: local
+  storage_postgres_data:
     driver: local
   storage_uploads:
     driver: local
