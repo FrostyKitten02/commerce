@@ -15,7 +15,7 @@ import java.util.List;
 @Configuration
 public class CatalogClientConfig {
 
-    @Value("${catalog.service.base-url:http://localhost:8001/api}")
+    @Value("${catalog-ws.base-path}")
     private String catalogBaseUrl;
 
     @Bean
