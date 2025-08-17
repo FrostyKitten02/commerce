@@ -111,29 +111,4 @@ public class ProductController {
         return productService.searchProducts();
     }
 
-//    @PreAuthorize("hasRole('ADMIN')")
-//    @PostMapping("{productId}/files")
-//    public ResourceCreatedRes uploadProductFile(
-//            @PathVariable @NotNull UUID productId,
-//            @RequestParam("file") MultipartFile file,
-//            HttpServletResponse servletResponse
-//    ) {
-//        // Verify product exists
-//        productService.getProduct(productId);
-//
-//        try {
-//            // Upload file to storage service
-//            var uploadResponse = storageApi.uploadFile(file.getResource());
-//
-//            servletResponse.setStatus(HttpServletResponse.SC_CREATED);
-//
-//            ResourceCreatedRes res = new ResourceCreatedRes();
-//            res.setId(uploadResponse.getId());
-//            return res;
-//
-//        } catch (Exception e) {
-//            throw new RuntimeException("Failed to upload file", e);
-//        }
-//    }
-
 }
