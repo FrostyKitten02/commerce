@@ -79,7 +79,7 @@ export default function AddToCart({
                 onClick={addToCart}
                 disabled={loading}
             >
-                {loading ? "Adding..." : "V košarico"}
+                {loading ? "Adding..." : "Add to Cart"}
             </Button>
             <Snackbar
                 open={snackbar.open}

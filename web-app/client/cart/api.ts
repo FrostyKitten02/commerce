@@ -87,6 +87,24 @@ export interface CartProductDto {
     'productId'?: string;
     /**
      * 
+     * @type {string}
+     * @memberof CartProductDto
+     */
+    'pictureId'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CartProductDto
+     */
+    'name'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CartProductDto
+     */
+    'sku'?: string;
+    /**
+     * 
      * @type {number}
      * @memberof CartProductDto
      */

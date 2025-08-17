@@ -28,6 +28,7 @@ import {useNavigate} from "react-router-dom";
 import {CreateProductDto, ProductDto, UpdateProductDto} from "../../client/catalog";
 
 interface ProductFormData {
+    sku: string;
     name: string;
     description: string;
     price: string;
@@ -44,6 +45,7 @@ export default function AdminProductsPage() {
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState<ProductFormData>({
+        sku: '',
         name: '',
         description: '',
         price: '',
@@ -65,7 +67,7 @@ export default function AdminProductsPage() {
             setProducts(response.data.products || []);
         } catch (error) {
             console.error('Error loading products:', error);
-            setError('Napaka pri nalaganju izdelkov');
+            setError('Error loading products');
         } finally {
             setLoading(false);
         }
@@ -80,6 +82,7 @@ export default function AdminProductsPage() {
         if (product) {
             setEditingProduct(product);
             setFormData({
+                sku: product.sku || '',
                 name: product.name || '',
                 description: product.description || '',
                 price: product.price?.toString() || '',
@@ -88,6 +91,7 @@ export default function AdminProductsPage() {
         } else {
             setEditingProduct(null);
             setFormData({
+                sku: '',
                 name: '',
                 description: '',
                 price: '',
@@ -103,6 +107,7 @@ export default function AdminProductsPage() {
         setOpen(false);
         setEditingProduct(null);
         setFormData({
+            sku: '',
             name: '',
             description: '',
             price: '',
@@ -127,16 +132,20 @@ export default function AdminProductsPage() {
     };
 
     const validateForm = () => {
+        if (!formData.sku.trim()) {
+            setError('SKU is required');
+            return false;
+        }
         if (!formData.name.trim()) {
-            setError('Ime izdelka je obvezno');
+            setError('Product name is required');
             return false;
         }
         if (!formData.description.trim()) {
-            setError('Opis izdelka je obvezen');
+            setError('Product description is required');
             return false;
         }
         if (!formData.price || isNaN(Number(formData.price)) || Number(formData.price) <= 0) {
-            setError('Cena mora biti veljavno pozitivno število');
+            setError('Price must be a valid positive number');
             return false;
         }
         return true;
@@ -154,6 +163,7 @@ export default function AdminProductsPage() {
                 const formDataToSend = new FormData();
                 
                 // Use dot notation for nested object properties
+                formDataToSend.append('product.sku', formData.sku.trim());
                 formDataToSend.append('product.name', formData.name.trim());
                 formDataToSend.append('product.description', formData.description.trim());
                 formDataToSend.append('product.price', formData.price);
@@ -177,12 +187,13 @@ export default function AdminProductsPage() {
                     formDataToSend,
                     config
                 );
-                setSuccess('Izdelek uspešno posodobljen');
+                setSuccess('Product updated successfully');
             } else {
                 // For new products, create FormData with dot notation for @ModelAttribute
                 const formDataToSend = new FormData();
                 
                 // Use dot notation for nested object properties
+                formDataToSend.append('product.sku', formData.sku.trim());
                 formDataToSend.append('product.name', formData.name.trim());
                 formDataToSend.append('product.description', formData.description.trim());
                 formDataToSend.append('product.price', formData.price);
@@ -206,21 +217,21 @@ export default function AdminProductsPage() {
                     formDataToSend,
                     config
                 );
-                setSuccess('Izdelek uspešno dodan');
+                setSuccess('Product added successfully');
             }
 
             handleCloseDialog();
             await loadProducts();
         } catch (error: any) {
             console.error('Error saving product:', error);
-            setError('Napaka pri shranjevanju izdelka');
+            setError('Error saving product');
         } finally {
             setLoading(false);
         }
     };
 
     const handleDelete = async (productId: string) => {
-        if (!window.confirm('Ali ste prepričani, da želite izbrisati ta izdelek?')) {
+        if (!window.confirm('Are you sure you want to delete this product?')) {
             return;
         }
 
@@ -230,11 +241,11 @@ export default function AdminProductsPage() {
                 productId,
                 RequestUtil.createBaseAxiosRequestConfig()
             );
-            setSuccess('Izdelek uspešno izbrisan');
+            setSuccess('Product deleted successfully');
             await loadProducts();
         } catch (error: any) {
             console.error('Error deleting product:', error);
-            setError('Napaka pri brisanju izdelka');
+            setError('Error deleting product');
         } finally {
             setLoading(false);
         }
@@ -245,10 +256,10 @@ export default function AdminProductsPage() {
             <AppBar position="static" color="error">
                 <Toolbar>
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        Admin - Upravljanje Izdelkov
+                        Admin - Product Management
                     </Typography>
                     <Button color="inherit" onClick={handleLogout} startIcon={<Logout />}>
-                        Odjava
+                        Logout
                     </Button>
                 </Toolbar>
             </AppBar>
@@ -267,7 +278,7 @@ export default function AdminProductsPage() {
 
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
                     <Typography variant="h4" component="h1">
-                        Izdelki
+                        Products
                     </Typography>
                     <Button
                         variant="contained"
@@ -276,7 +287,7 @@ export default function AdminProductsPage() {
                         onClick={() => handleOpenDialog()}
                         disabled={loading}
                     >
-                        Dodaj Izdelek
+                        Add Product
                     </Button>
                 </Box>
 
@@ -324,6 +335,15 @@ export default function AdminProductsPage() {
                                             </IconButton>
                                         </Box>
                                     </Box>
+
+                                    {product.sku && (
+                                        <Chip 
+                                            label={`SKU: ${product.sku}`} 
+                                            size="small" 
+                                            variant="outlined"
+                                            sx={{ mb: 1 }}
+                                        />
+                                    )}
                                     
                                     <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
                                         {product.description}
@@ -341,7 +361,7 @@ export default function AdminProductsPage() {
                 {products.length === 0 && !loading && (
                     <Box sx={{ textAlign: 'center', mt: 4 }}>
                         <Typography variant="h6" color="text.secondary">
-                            Ni izdelkov. Dodajte prvi izdelek.
+                            No products found. Add your first product.
                         </Typography>
                     </Box>
                 )}
@@ -350,14 +370,27 @@ export default function AdminProductsPage() {
             {/* Add/Edit Product Dialog */}
             <Dialog open={open} onClose={handleCloseDialog} maxWidth="sm" fullWidth>
                 <DialogTitle>
-                    {editingProduct ? 'Uredi Izdelek' : 'Dodaj Nov Izdelek'}
+                    {editingProduct ? 'Edit Product' : 'Add New Product'}
                 </DialogTitle>
                 <DialogContent>
                     <TextField
                         autoFocus
                         margin="dense"
+                        name="sku"
+                        label="SKU (Product Code)"
+                        type="text"
+                        fullWidth
+                        variant="outlined"
+                        value={formData.sku}
+                        onChange={handleChange}
+                        required
+                        sx={{ mb: 2 }}
+                        placeholder="e.g. PROD-001"
+                    />
+                    <TextField
+                        margin="dense"
                         name="name"
-                        label="Ime Izdelka"
+                        label="Product Name"
                         type="text"
                         fullWidth
                         variant="outlined"
@@ -369,7 +402,7 @@ export default function AdminProductsPage() {
                     <TextField
                         margin="dense"
                         name="description"
-                        label="Opis"
+                        label="Description"
                         type="text"
                         fullWidth
                         variant="outlined"
@@ -383,7 +416,7 @@ export default function AdminProductsPage() {
                     <TextField
                         margin="dense"
                         name="price"
-                        label="Cena (€)"
+                        label="Price (€)"
                         type="number"
                         fullWidth
                         variant="outlined"
@@ -396,7 +429,7 @@ export default function AdminProductsPage() {
                     
                     <Box sx={{ mb: 2 }}>
                         <Typography variant="body2" sx={{ mb: 1 }}>
-                            Slika izdelka (opcijsko)
+                            Product Image (optional)
                         </Typography>
                         <Input
                             type="file"
@@ -406,22 +439,22 @@ export default function AdminProductsPage() {
                         />
                         {formData.file && (
                             <Typography variant="caption" color="text.secondary" sx={{ mt: 1, display: 'block' }}>
-                                Izbrana datoteka: {formData.file.name}
+                                Selected file: {formData.file.name}
                             </Typography>
                         )}
                         {editingProduct && editingProduct.pictureId && (
                             <Typography variant="caption" color="text.secondary" sx={{ mt: 1, display: 'block' }}>
-                                Trenutna slika: {editingProduct.pictureId}
+                                Current image: {editingProduct.pictureId}
                             </Typography>
                         )}
                     </Box>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleCloseDialog} disabled={loading}>
-                        Prekliči
+                        Cancel
                     </Button>
                     <Button onClick={handleSubmit} variant="contained" disabled={loading}>
-                        {loading ? 'Shranjujem...' : (editingProduct ? 'Posodobi' : 'Dodaj')}
+                        {loading ? 'Saving...' : (editingProduct ? 'Update' : 'Add')}
                     </Button>
                 </DialogActions>
             </Dialog>

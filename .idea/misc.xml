@@ -13,6 +13,8 @@
         <option value="$PROJECT_DIR$/auth-common/pom.xml" />
         <option value="$PROJECT_DIR$/cart/pom.xml" />
         <option value="$PROJECT_DIR$/exception-handling/pom.xml" />
+        <option value="$PROJECT_DIR$/checkout/checkout/pom.xml" />
+        <option value="$PROJECT_DIR$/checkout/pom.xml" />
       </list>
     </option>
     <option name="workspaceImportForciblyTurnedOn" value="true" />

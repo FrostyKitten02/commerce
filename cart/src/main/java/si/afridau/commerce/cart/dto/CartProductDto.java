@@ -14,6 +14,9 @@ import java.util.UUID;
 public class CartProductDto {
     private UUID id;
     private UUID productId;
+    private UUID pictureId;
+    private String name;
+    private String sku;
     private BigDecimal price;
     private BigDecimal quantity;
     private BigDecimal lineTotal;

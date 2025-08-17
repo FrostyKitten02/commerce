@@ -30,4 +30,14 @@ export default class StorageUtil {
         return localStorage.getItem(this.ADMIN_SESSION_KEY) === "true";
     }
 
+    public static isLoggedIn(): boolean {
+        return this.getSessionToken() !== null;
+    }
+
+    public static logout(): void {
+        this.clearSession();
+        // Optionally redirect to home page or reload
+        window.location.href = '/';
+    }
+
 }

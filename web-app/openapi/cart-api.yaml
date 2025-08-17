@@ -118,6 +118,13 @@ components:
         productId:
           type: string
           format: uuid
+        pictureId:
+          type: string
+          format: uuid
+        name:
+          type: string
+        sku:
+          type: string
         price:
           type: number
         quantity:

@@ -3,6 +3,8 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
+import {ThemeProvider} from '@mui/material/styles';
+import {CssBaseline} from '@mui/material';
 import PageTemplate from "./template/PageTemplate";
 import ProductsPage from "./pages/ProductsPage";
 import CartPage from "./pages/CartPage";
@@ -11,6 +13,7 @@ import AdminLoginPage from "./pages/AdminLoginPage";
 import AdminProductsPage from "./pages/AdminProductsPage";
 import {ConfigUtil} from "./util/ConfigUtil";
 import ProductPage from "./pages/ProductPage";
+import {theme} from "./theme/theme";
 
 function App() {
     ConfigUtil.readConfig();
@@ -52,7 +55,12 @@ function App() {
             }
         ])
 
-    return <RouterProvider router={router} />
+    return (
+        <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <RouterProvider router={router} />
+        </ThemeProvider>
+    )
 }
 
 export default App

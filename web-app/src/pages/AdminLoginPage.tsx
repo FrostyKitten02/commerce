@@ -27,15 +27,15 @@ export default function AdminLoginPage() {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
         if (!formData.email) {
-            setError('Email je obvezen');
+            setError('Email is required');
             return false;
         } else if (!emailRegex.test(formData.email)) {
-            setError('Neveljaven email');
+            setError('Invalid email');
             return false;
         }
 
         if (!formData.password) {
-            setError('Geslo je obvezno');
+            setError('Password is required');
             return false;
         }
 
@@ -57,7 +57,7 @@ export default function AdminLoginPage() {
 
             const token = response.data.token;
             if (!token) {
-                setError('Neuspešna prijava');
+                setError('Login failed');
                 return;
             }
 
@@ -69,10 +69,13 @@ export default function AdminLoginPage() {
                 password: ""
             });
 
+            // Trigger auth state change event
+            window.dispatchEvent(new Event('auth-changed'));
+
             navigate('/admin/products');
         } catch (error: any) {
             console.error('Login error:', error);
-            setError('Napačen email ali geslo');
+            setError('Invalid email or password');
         } finally {
             setLoading(false);
         }
@@ -92,7 +95,7 @@ export default function AdminLoginPage() {
                     <AdminPanelSettingsIcon />
                 </Avatar>
                 <Typography component="h1" variant="h5">
-                    Admin Prijava
+                    Admin Login
                 </Typography>
                 <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
                     {error && (
@@ -118,7 +121,7 @@ export default function AdminLoginPage() {
                         required
                         fullWidth
                         name="password"
-                        label="Admin Geslo"
+                        label="Admin Password"
                         type="password"
                         id="password"
                         autoComplete="current-password"
@@ -134,7 +137,7 @@ export default function AdminLoginPage() {
                         sx={{ mt: 3, mb: 2 }}
                         disabled={loading}
                     >
-                        {loading ? 'Prijavljam...' : 'Admin Prijava'}
+                        {loading ? 'Logging in...' : 'Admin Login'}
                     </Button>
                 </Box>
             </Box>

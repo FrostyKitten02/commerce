@@ -64,7 +64,7 @@ const ProductsPage = () => {
                             </CardContent>
                             <CardActions>
                                 <Link href={"products/" + product.id} >
-                                    <Button size="small">Odpri</Button>
+                                    <Button size="small">Open</Button>
                                 </Link>
                                 <AddToCart productId={product.id??""} quantity={1} />
                             </CardActions>

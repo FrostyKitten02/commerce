@@ -59,7 +59,13 @@ export default function LoginPage() {
                 setFormData({
                     email: "",
                     password: ""
-                })
+                });
+                
+                // Trigger auth state change event
+                window.dispatchEvent(new Event('auth-changed'));
+                
+                // Redirect to products page
+                window.location.href = '/products';
             });
         }
     };
@@ -78,7 +84,7 @@ export default function LoginPage() {
                     <LockOutlinedIcon />
                 </Avatar>
                 <Typography component="h1" variant="h5">
-                    Prijava
+                    Login
                 </Typography>
                 <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
                     <TextField
@@ -98,7 +104,7 @@ export default function LoginPage() {
                         required
                         fullWidth
                         name="password"
-                        label="Geslo"
+                        label="Password"
                         type="password"
                         id="password"
                         autoComplete="current-password"
@@ -123,7 +129,7 @@ export default function LoginPage() {
                         variant="contained"
                         sx={{ mt: 3, mb: 2 }}
                     >
-                        Prijava
+                        Login
                     </Button>
                     <Grid2 container>
                         {/*<Grid2 item xs>*/}
@@ -133,7 +139,7 @@ export default function LoginPage() {
                         {/*</Grid2>*/}
                         <Grid2 item>
                             <Link href="register" variant="body2">
-                                {"Registracija"}
+                                {"Register"}
                             </Link>
                         </Grid2>
                     </Grid2>

@@ -22,6 +22,7 @@ import si.afridau.commerce.exception.implementation.ItemNotFoundException;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -55,17 +56,34 @@ public class CartService {
         }
 
         List<ProductDto> products = res.getProducts();
+        List<CartProductDto> validCartProducts = new ArrayList<>();
+        List<UUID> productsToRemove = new ArrayList<>();
+        
         for (CartProductDto cp : cartDto.getCartProducts()) {
             Optional<ProductDto> prod = products.stream().filter(p -> p.getId().equals(cp.getProductId())).findFirst();
             if (prod.isEmpty()) {
-                //TODO dont throw but simply remove bad item from cart!
-                throw new ItemNotFoundException("Product in cart not found in catalog");
+                // Product not found in catalog - mark for removal
+                productsToRemove.add(cp.getId());
+            } else {
+                cp.setPictureId(prod.get().getPictureId());
+                cp.setSku(prod.get().getSku());
+                cp.setName(prod.get().getName());
+                // Product exists - calculate totals and keep it
+                BigDecimal lineTotal = cp.getQuantity().multiply(prod.get().getPrice());
+                cp.setLineTotal(lineTotal);
+                cp.setPrice(prod.get().getPrice());
+                total = total.add(lineTotal);
+                validCartProducts.add(cp);
             }
-            BigDecimal lineTotal = cp.getQuantity().multiply(prod.get().getPrice());
-            cp.setLineTotal(lineTotal);
-            cp.setPrice(prod.get().getPrice());
-            total = total.add(lineTotal);
         }
+        
+        // Remove invalid products from database
+        if (!productsToRemove.isEmpty()) {
+            cartProductRepository.deleteAllById(productsToRemove);
+        }
+        
+        // Update cart DTO with only valid products
+        cartDto.setCartProducts(validCartProducts);
 
         cartDto.setTotal(total);
         return cartDto;
