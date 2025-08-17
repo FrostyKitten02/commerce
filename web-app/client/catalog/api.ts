@@ -645,12 +645,84 @@ export const ProductControllerApiFactory = function (configuration?: Configurati
 };
 
 /**
+ * ProductControllerApi - interface
+ * @export
+ * @interface ProductControllerApi
+ */
+export interface ProductControllerApiInterface {
+    /**
+     * 
+     * @param {CreateProductReq} createProductReq 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProductControllerApiInterface
+     */
+    createProduct(createProductReq: CreateProductReq, options?: RawAxiosRequestConfig): AxiosPromise<ResourceCreatedRes>;
+
+    /**
+     * 
+     * @param {string} productId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProductControllerApiInterface
+     */
+    deleteProduct(productId: string, options?: RawAxiosRequestConfig): AxiosPromise<void>;
+
+    /**
+     * 
+     * @param {string} productId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProductControllerApiInterface
+     */
+    getProduct(productId: string, options?: RawAxiosRequestConfig): AxiosPromise<GetProductRes>;
+
+    /**
+     * 
+     * @param {Array<string>} ids 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProductControllerApiInterface
+     */
+    getProducts(ids: Array<string>, options?: RawAxiosRequestConfig): AxiosPromise<GetProductRes>;
+
+    /**
+     * 
+     * @param {string} productId 
+     * @param {CreateProductReq} createProductReq 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProductControllerApiInterface
+     */
+    replaceProduct(productId: string, createProductReq: CreateProductReq, options?: RawAxiosRequestConfig): AxiosPromise<void>;
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProductControllerApiInterface
+     */
+    searchProducts(options?: RawAxiosRequestConfig): AxiosPromise<ProductListRes>;
+
+    /**
+     * 
+     * @param {string} productId 
+     * @param {UpdateProductReq} updateProductReq 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProductControllerApiInterface
+     */
+    updateProduct(productId: string, updateProductReq: UpdateProductReq, options?: RawAxiosRequestConfig): AxiosPromise<void>;
+
+}
+
+/**
  * ProductControllerApi - object-oriented interface
  * @export
  * @class ProductControllerApi
  * @extends {BaseAPI}
  */
-export class ProductControllerApi extends BaseAPI {
+export class ProductControllerApi extends BaseAPI implements ProductControllerApiInterface {
     /**
      * 
      * @param {CreateProductReq} createProductReq 

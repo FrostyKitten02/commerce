@@ -90,6 +90,12 @@ export interface CartProductDto {
      * @type {number}
      * @memberof CartProductDto
      */
+    'price'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CartProductDto
+     */
     'quantity'?: number;
     /**
      * 
@@ -434,12 +440,65 @@ export const CartControllerApiFactory = function (configuration?: Configuration,
 };
 
 /**
+ * CartControllerApi - interface
+ * @export
+ * @interface CartControllerApi
+ */
+export interface CartControllerApiInterface {
+    /**
+     * 
+     * @param {string} cartId 
+     * @param {AddToCartReq} addToCartReq 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CartControllerApiInterface
+     */
+    addToCart(cartId: string, addToCartReq: AddToCartReq, options?: RawAxiosRequestConfig): AxiosPromise<void>;
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CartControllerApiInterface
+     */
+    deleteCart(options?: RawAxiosRequestConfig): AxiosPromise<void>;
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CartControllerApiInterface
+     */
+    getCart(options?: RawAxiosRequestConfig): AxiosPromise<GetCartRes>;
+
+    /**
+     * 
+     * @param {string} cartId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CartControllerApiInterface
+     */
+    removeFromCart(cartId: string, options?: RawAxiosRequestConfig): AxiosPromise<void>;
+
+    /**
+     * 
+     * @param {string} cartProductId 
+     * @param {number} quantity 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CartControllerApiInterface
+     */
+    updateQuantity(cartProductId: string, quantity: number, options?: RawAxiosRequestConfig): AxiosPromise<void>;
+
+}
+
+/**
  * CartControllerApi - object-oriented interface
  * @export
  * @class CartControllerApi
  * @extends {BaseAPI}
  */
-export class CartControllerApi extends BaseAPI {
+export class CartControllerApi extends BaseAPI implements CartControllerApiInterface {
     /**
      * 
      * @param {string} cartId 

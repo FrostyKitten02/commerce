@@ -243,12 +243,38 @@ export const AuthControllerApiFactory = function (configuration?: Configuration,
 };
 
 /**
+ * AuthControllerApi - interface
+ * @export
+ * @interface AuthControllerApi
+ */
+export interface AuthControllerApiInterface {
+    /**
+     * 
+     * @param {LoginRequest} loginRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthControllerApiInterface
+     */
+    login(loginRequest: LoginRequest, options?: RawAxiosRequestConfig): AxiosPromise<LoginResponse>;
+
+    /**
+     * 
+     * @param {RegisterRequest} registerRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthControllerApiInterface
+     */
+    register(registerRequest: RegisterRequest, options?: RawAxiosRequestConfig): AxiosPromise<void>;
+
+}
+
+/**
  * AuthControllerApi - object-oriented interface
  * @export
  * @class AuthControllerApi
  * @extends {BaseAPI}
  */
-export class AuthControllerApi extends BaseAPI {
+export class AuthControllerApi extends BaseAPI implements AuthControllerApiInterface {
     /**
      * 
      * @param {LoginRequest} loginRequest 
