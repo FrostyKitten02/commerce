@@ -3,13 +3,11 @@ package si.afridau.commerce.cart.service;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import si.afridau.commerce.auth.model.JwtUser;
-import si.afridau.commerce.cart.catalogclient.CatalogProductDto;
-import si.afridau.commerce.cart.catalogclient.GetProductResDto;
+import si.afridau.commerce.cart.client.catalog.model.GetProductRes;
+import si.afridau.commerce.cart.client.catalog.model.ProductDto;
 import si.afridau.commerce.cart.dto.CartDto;
 import si.afridau.commerce.cart.dto.CartProductDto;
 import si.afridau.commerce.cart.mapper.CartMapper;
@@ -51,14 +49,14 @@ public class CartService {
         CartDto cartDto = cartMapper.toDto(cart);
 
         BigDecimal total = BigDecimal.ZERO;
-        GetProductResDto res = catalogClientService.getProducts(cartDto.getCartProducts().stream().map(CartProductDto::getProductId).toList(), SecurityContextHolder.getContext().getAuthentication().getCredentials().toString());
+        GetProductRes res = catalogClientService.getProducts(cartDto.getCartProducts().stream().map(CartProductDto::getProductId).toList());
         if (res == null) {
             return cartDto;
         }
 
-        List<CatalogProductDto> products = res.getProducts();
+        List<ProductDto> products = res.getProducts();
         for (CartProductDto cp : cartDto.getCartProducts()) {
-            Optional<CatalogProductDto> prod = products.stream().filter(p -> p.getId().equals(cp.getProductId())).findFirst();
+            Optional<ProductDto> prod = products.stream().filter(p -> p.getId().equals(cp.getProductId())).findFirst();
             if (prod.isEmpty()) {
                 //TODO dont throw but simply remove bad item from cart!
                 throw new ItemNotFoundException("Product in cart not found in catalog");

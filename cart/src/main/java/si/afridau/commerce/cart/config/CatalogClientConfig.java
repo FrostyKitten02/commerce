@@ -1,4 +1,4 @@
-package si.afridau.commerce.catalog.config;
+package si.afridau.commerce.cart.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -7,19 +7,19 @@ import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.client.RestTemplate;
-import si.afridau.commerce.catalog.client.storage.ApiClient;
-import si.afridau.commerce.catalog.client.storage.api.DefaultApi;
+import si.afridau.commerce.cart.client.catalog.ApiClient;
+import si.afridau.commerce.cart.client.catalog.api.ProductControllerApi;
 
 import java.util.List;
 
 @Configuration
-public class StorageClientConfig {
+public class CatalogClientConfig {
 
-    @Value("${storage-ws.base-path}")
-    private String storageBasePath;
+    @Value("${catalog.service.base-url:http://localhost:8001/api}")
+    private String catalogBaseUrl;
 
     @Bean
-    public RestTemplate storageRestTemplate() {
+    public RestTemplate catalogRestTemplate() {
         RestTemplate restTemplate = new RestTemplate();
         
         // Add JWT interceptor
@@ -29,15 +29,15 @@ public class StorageClientConfig {
     }
 
     @Bean
-    public ApiClient storageApiClient(RestTemplate storageRestTemplate) {
-        ApiClient apiClient = new ApiClient(storageRestTemplate);
-        apiClient.setBasePath(storageBasePath);
+    public ApiClient catalogApiClient(RestTemplate catalogRestTemplate) {
+        ApiClient apiClient = new ApiClient(catalogRestTemplate);
+        apiClient.setBasePath(catalogBaseUrl);
         return apiClient;
     }
 
     @Bean
-    public DefaultApi storageApi(ApiClient storageApiClient) {
-        return new DefaultApi(storageApiClient);
+    public ProductControllerApi productControllerApi(ApiClient catalogApiClient) {
+        return new ProductControllerApi(catalogApiClient);
     }
 
     private ClientHttpRequestInterceptor jwtInterceptor() {
