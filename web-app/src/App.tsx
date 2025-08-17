@@ -7,6 +7,8 @@ import PageTemplate from "./template/PageTemplate";
 import ProductsPage from "./pages/ProductsPage";
 import CartPage from "./pages/CartPage";
 import LoginPage from "./pages/LoginPage";
+import AdminLoginPage from "./pages/AdminLoginPage";
+import AdminProductsPage from "./pages/AdminProductsPage";
 import {ConfigUtil} from "./util/ConfigUtil";
 import ProductPage from "./pages/ProductPage";
 
@@ -39,6 +41,14 @@ function App() {
                         element: <LoginPage />
                     }
                 ]
+            },
+            {
+                path: "/admin",
+                element: <AdminLoginPage />
+            },
+            {
+                path: "/admin/products",
+                element: <AdminProductsPage />
             }
         ])
 
