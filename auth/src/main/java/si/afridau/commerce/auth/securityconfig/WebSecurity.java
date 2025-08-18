@@ -43,6 +43,8 @@ public class WebSecurity {
                             .requestMatchers("/docs/**").permitAll()
                             .requestMatchers("/docs").permitAll()
                             .requestMatchers("/docs.yaml").permitAll()
+                            .requestMatchers("/actuator/health").permitAll()
+                            .requestMatchers("/actuator/info").permitAll()
                             .anyRequest().authenticated();
                 })
                 .authenticationManager(authenticationManager)
