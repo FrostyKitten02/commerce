@@ -17,7 +17,11 @@ import {
     AppBar,
     Toolbar,
     Chip,
-    Input
+    Input,
+    FormControl,
+    InputLabel,
+    Select,
+    MenuItem
 } from '@mui/material';
 import {Add, Logout, Edit, Delete, AutoAwesome} from '@mui/icons-material';
 import axios from 'axios';
@@ -34,6 +38,7 @@ interface ProductFormData {
     description: string;
     price: string;
     file?: File;
+    category: string;
 }
 
 export default function AdminProductsPage() {
@@ -51,8 +56,18 @@ export default function AdminProductsPage() {
         name: '',
         description: '',
         price: '',
-        file: undefined
+        file: undefined,
+        category: 'electronics'
     });
+
+    const categories = [
+        { value: 'electronics', label: 'Electronics' },
+        { value: 'clothing', label: 'Clothing' },
+        { value: 'food', label: 'Food' },
+        { value: 'books', label: 'Books' },
+        { value: 'sports', label: 'Sports' },
+        { value: 'home', label: 'Home & Garden' }
+    ];
 
     useEffect(() => {
         if (!StorageUtil.isAdminSession()) {
@@ -88,7 +103,8 @@ export default function AdminProductsPage() {
                 name: product.name || '',
                 description: product.description || '',
                 price: product.price?.toString() || '',
-                file: undefined
+                file: undefined,
+                category: 'electronics'
             });
         } else {
             setEditingProduct(null);
@@ -97,7 +113,8 @@ export default function AdminProductsPage() {
                 name: '',
                 description: '',
                 price: '',
-                file: undefined
+                file: undefined,
+                category: 'electronics'
             });
         }
         setOpen(true);
@@ -113,7 +130,8 @@ export default function AdminProductsPage() {
             name: '',
             description: '',
             price: '',
-            file: undefined
+            file: undefined,
+            category: 'electronics'
         });
     };
 
@@ -260,7 +278,7 @@ export default function AdminProductsPage() {
         try {
             const productNameApi = RequestUtil.createProductNameGeneratorApi();
             const request: GenerateNameRequest = {
-                category: 'ELECTRONICS', // Default category
+                category: formData.category.toUpperCase(),
                 keywords: formData.description ? formData.description.split(' ').slice(0, 3) : []
             };
             
@@ -432,17 +450,33 @@ export default function AdminProductsPage() {
                             value={formData.name}
                             onChange={handleChange}
                             required
+                            sx={{ mb: 1 }}
                         />
-                        <Button
-                            variant="outlined"
-                            startIcon={<AutoAwesome />}
-                            onClick={handleGenerateName}
-                            disabled={generatingName || loading}
-                            sx={{ mt: 1 }}
-                            size="small"
-                        >
-                            {generatingName ? 'Generating...' : 'Generate Creative Name'}
-                        </Button>
+                        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+                            <FormControl size="small" sx={{ minWidth: 140 }}>
+                                <InputLabel>Category</InputLabel>
+                                <Select
+                                    value={formData.category}
+                                    label="Category"
+                                    onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
+                                >
+                                    {categories.map((cat) => (
+                                        <MenuItem key={cat.value} value={cat.value}>
+                                            {cat.label}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                            <Button
+                                variant="outlined"
+                                startIcon={<AutoAwesome />}
+                                onClick={handleGenerateName}
+                                disabled={generatingName || loading}
+                                size="small"
+                            >
+                                {generatingName ? 'Generating...' : 'Generate Creative Name'}
+                            </Button>
+                        </Box>
                     </Box>
                     <TextField
                         margin="dense"
