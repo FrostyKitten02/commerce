@@ -63,7 +63,7 @@ public class StatisticsService {
         stats.setRequestsByCategory(categoryStats);
 
         // Calculate overall average processing time
-        float overallAvg = categoryProcessingTimes.values().stream()
+        double overallAvg = categoryProcessingTimes.values().stream()
                 .flatMap(List::stream)
                 .mapToInt(Integer::intValue)
                 .average()
