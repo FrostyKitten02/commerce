@@ -225,6 +225,18 @@ services:
       - commerce-network
     restart: unless-stopped
 
+  # Product Name Generator Service
+  product-name-generator-service:
+    build:
+      context: ./product-name-generator
+      dockerfile: Dockerfile
+    container_name: commerce-product-name-generator
+    ports:
+      - "8087:8087"
+    networks:
+      - commerce-network
+    restart: unless-stopped
+
   # Web Application (React)
   web-app:
     build:

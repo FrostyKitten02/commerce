@@ -61,7 +61,36 @@ mvn spring-boot:run
 # Access at http://localhost:8087
 ```
 
-### 2. AWS Lambda
+### 2. Local Lambda Testing (Serverless)
+**Prerequisites**: Install [AWS SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/install-sam-cli.html)
+
+```bash
+# Windows
+run-local-lambda.bat
+
+# Linux/Mac
+chmod +x run-local-lambda.sh
+./run-local-lambda.sh
+
+# Access at http://localhost:3000
+```
+
+**Test the local Lambda**:
+```bash
+# Windows
+test-lambda.bat
+
+# Linux/Mac
+chmod +x test-lambda.sh
+./test-lambda.sh
+```
+
+**Direct Lambda invocation**:
+```bash
+sam local invoke ProductNameGeneratorFunction --event events/generate-name-event.json
+```
+
+### 3. AWS Lambda (Production)
 1. Build the JAR:
    ```bash
    mvn clean package
@@ -70,9 +99,12 @@ mvn spring-boot:run
 3. Set handler: `si.afridau.commerce.productname.lambda.ProductNameLambdaHandler`
 4. Configure API Gateway to trigger the function
 
-### 3. Vercel Functions
-1. Convert to Node.js or use Java runtime
-2. Deploy using Vercel CLI
+### 4. AWS SAM Deploy (Infrastructure as Code)
+```bash
+# Deploy to AWS
+sam build
+sam deploy --guided
+```
 
 ## Categories Supported
 

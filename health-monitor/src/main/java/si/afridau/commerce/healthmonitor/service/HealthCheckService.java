@@ -29,6 +29,9 @@ public class HealthCheckService {
     @Value("${services.checkout.url}")
     private String checkoutUrl;
 
+    @Value("${services.product-name-generator.url}")
+    private String productNameGeneratorUrl;
+
     private final RestTemplate restTemplate;
 
     public HealthCheckService() {
@@ -48,6 +51,7 @@ public class HealthCheckService {
         services.add(checkService("Cart Service", cartUrl + "/actuator/health"));
         services.add(checkService("Storage Service", storageUrl + "/health"));
         services.add(checkService("Checkout Service", checkoutUrl + "/actuator/health"));
+        services.add(checkService("Product Name Generator", productNameGeneratorUrl + "/actuator/health"));
 
         report.setServices(services);
         report.setTotalServices(services.size());
@@ -96,7 +100,8 @@ public class HealthCheckService {
             "catalog", catalogUrl,
             "cart", cartUrl,
             "storage", storageUrl,
-            "checkout", checkoutUrl
+            "checkout", checkoutUrl,
+            "product-name-generator", productNameGeneratorUrl
         );
     }
 }
