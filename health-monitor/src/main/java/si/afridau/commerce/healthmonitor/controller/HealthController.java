@@ -26,7 +26,7 @@ public class HealthController {
 
     @Operation(
         summary = "Get overall health status",
-        description = "Returns health status report for all monitored microservices"
+        description = "Returns comprehensive health status report for all monitored microservices including response times, status counts, and system metrics"
     )
     @ApiResponse(
         responseCode = "200",
@@ -41,7 +41,7 @@ public class HealthController {
 
     @Operation(
         summary = "Check specific service health",
-        description = "Returns health status for a specific service"
+        description = "Returns detailed health status for a specific service including response time, last check time, and error details if any"
     )
     @ApiResponse(
         responseCode = "200",
@@ -66,7 +66,7 @@ public class HealthController {
 
     @Operation(
         summary = "Get available services",
-        description = "Returns list of all services being monitored"
+        description = "Returns map of all services being monitored with their service names and base URLs"
     )
     @ApiResponse(
         responseCode = "200", 

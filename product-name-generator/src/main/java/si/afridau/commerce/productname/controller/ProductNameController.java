@@ -27,7 +27,7 @@ public class ProductNameController {
 
     @Operation(
         summary = "Generate product names",
-        description = "Generate creative product names based on keywords and category"
+        description = "Generate creative product names using advanced algorithms based on provided keywords, category, and desired count. Returns suggestions with category-specific prefixes and suffixes."
     )
     @ApiResponse(
         responseCode = "200",
@@ -52,7 +52,7 @@ public class ProductNameController {
 
     @Operation(
         summary = "Generate product names (simple)",
-        description = "Generate product names using query parameters for easy testing"
+        description = "Generate creative product names using simple query parameters instead of JSON body. Ideal for quick testing and integration with GET-based systems."
     )
     @ApiResponse(
         responseCode = "200",
@@ -89,7 +89,7 @@ public class ProductNameController {
 
     @Operation(
         summary = "Health check",
-        description = "Simple health check endpoint"
+        description = "Returns service health status to verify that the product name generator service is running and accessible"
     )
     @ApiResponse(responseCode = "200", description = "Service is healthy")
     @GetMapping("/health")
@@ -99,7 +99,7 @@ public class ProductNameController {
 
     @Operation(
         summary = "Get available categories",
-        description = "Returns list of supported product categories"
+        description = "Returns complete list of supported product categories that can be used for name generation (electronics, clothing, food, books, sports, home)"
     )
     @ApiResponse(
         responseCode = "200",

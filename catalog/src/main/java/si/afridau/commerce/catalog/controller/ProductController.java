@@ -1,5 +1,12 @@
 package si.afridau.commerce.catalog.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.security.PermitAll;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -41,11 +48,24 @@ import java.util.UUID;
 @RestController
 @RequestMapping("products")
 @RequiredArgsConstructor
+@Tag(name = "Product Catalog", description = "Product management endpoints for catalog service")
 public class ProductController {
     private final ProductService productService;
     private final ProductMapper productMapper;
     private final DefaultApi storageApi;
 
+    @Operation(
+        summary = "Create new product",
+        description = "Create a new product with details and optional image upload. Requires admin privileges."
+    )
+    @ApiResponse(
+        responseCode = "201",
+        description = "Product created successfully",
+        content = @Content(schema = @Schema(implementation = ResourceCreatedRes.class))
+    )
+    @ApiResponse(responseCode = "400", description = "Invalid product data")
+    @ApiResponse(responseCode = "403", description = "Access denied - admin role required")
+    @SecurityRequirement(name = "Bearer Authentication")
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(consumes = {"multipart/form-data"})
     public ResourceCreatedRes createProduct(
@@ -60,6 +80,16 @@ public class ProductController {
         return res;
     }
 
+    @Operation(
+        summary = "Get product by ID",
+        description = "Retrieve detailed information about a specific product by its unique identifier"
+    )
+    @ApiResponse(
+        responseCode = "200",
+        description = "Product found and returned",
+        content = @Content(schema = @Schema(implementation = GetProductRes.class))
+    )
+    @ApiResponse(responseCode = "404", description = "Product not found")
     @GetMapping("{productId}")
     public GetProductRes getProduct(
             @PathVariable @NotNull UUID productId
@@ -70,6 +100,15 @@ public class ProductController {
         return res;
     }
 
+    @Operation(
+        summary = "Get products by IDs",
+        description = "Retrieve multiple products by providing a list of product IDs as query parameters"
+    )
+    @ApiResponse(
+        responseCode = "200",
+        description = "Products found and returned",
+        content = @Content(schema = @Schema(implementation = GetProductRes.class))
+    )
     @GetMapping
     public GetProductRes getProducts(
             @NotNull @RequestParam List<UUID> ids
@@ -80,6 +119,14 @@ public class ProductController {
         return res;
     }
 
+    @Operation(
+        summary = "Update product",
+        description = "Update existing product with new data and optional image. Requires admin privileges."
+    )
+    @ApiResponse(responseCode = "200", description = "Product updated successfully")
+    @ApiResponse(responseCode = "404", description = "Product not found")
+    @ApiResponse(responseCode = "403", description = "Access denied - admin role required")
+    @SecurityRequirement(name = "Bearer Authentication")
     @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping(value = "{productId}", consumes = {"multipart/form-data"})
     public void updateProduct(
@@ -89,6 +136,14 @@ public class ProductController {
         productService.updateProduct(body, productId);
     }
 
+    @Operation(
+        summary = "Replace product",
+        description = "Completely replace existing product with new data. Requires admin privileges."
+    )
+    @ApiResponse(responseCode = "200", description = "Product replaced successfully")
+    @ApiResponse(responseCode = "404", description = "Product not found")
+    @ApiResponse(responseCode = "403", description = "Access denied - admin role required")
+    @SecurityRequirement(name = "Bearer Authentication")
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("{productId}")
     public void replaceProduct(
@@ -98,6 +153,14 @@ public class ProductController {
         productService.replaceProduct(body, productId);
     }
 
+    @Operation(
+        summary = "Delete product",
+        description = "Permanently delete a product from the catalog. Requires admin privileges."
+    )
+    @ApiResponse(responseCode = "200", description = "Product deleted successfully")
+    @ApiResponse(responseCode = "404", description = "Product not found")
+    @ApiResponse(responseCode = "403", description = "Access denied - admin role required")
+    @SecurityRequirement(name = "Bearer Authentication")
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("{productId}")
     public void deleteProduct(
@@ -106,6 +169,15 @@ public class ProductController {
         productService.deleteProduct(productId);
     }
 
+    @Operation(
+        summary = "Search all products",
+        description = "Retrieve list of all available products in the catalog with pagination support"
+    )
+    @ApiResponse(
+        responseCode = "200",
+        description = "Product list retrieved successfully",
+        content = @Content(schema = @Schema(implementation = ProductListRes.class))
+    )
     @GetMapping("list")
     public ProductListRes searchProducts() {
         return productService.searchProducts();
