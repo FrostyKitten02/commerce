@@ -258,6 +258,9 @@ export default function AdminProductsPage() {
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                         Admin - Product Management
                     </Typography>
+                    <Button color="inherit" onClick={() => navigate('/admin/health')} sx={{ mr: 2 }}>
+                        Health Monitor
+                    </Button>
                     <Button color="inherit" onClick={handleLogout} startIcon={<Logout />}>
                         Logout
                     </Button>

@@ -12,6 +12,7 @@ import CheckoutPage from "./pages/CheckoutPage";
 import LoginPage from "./pages/LoginPage";
 import AdminLoginPage from "./pages/AdminLoginPage";
 import AdminProductsPage from "./pages/AdminProductsPage";
+import AdminHealthPage from "./pages/AdminHealthPage";
 import {ConfigUtil} from "./util/ConfigUtil";
 import ProductPage from "./pages/ProductPage";
 import {theme} from "./theme/theme";
@@ -23,6 +24,10 @@ function App() {
                 path: "/",
                 element: <PageTemplate />,
                 children: [
+                    {
+                        path: "",
+                        element: <ProductsPage />
+                    },
                     {
                         path: "products",
                         children: [
@@ -57,6 +62,10 @@ function App() {
             {
                 path: "/admin/products",
                 element: <AdminProductsPage />
+            },
+            {
+                path: "/admin/health",
+                element: <AdminHealthPage />
             }
         ])
 

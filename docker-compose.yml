@@ -207,6 +207,24 @@ services:
       - commerce-network
     restart: unless-stopped
 
+  # Health Monitor Service
+  health-monitor-service:
+    build:
+      context: ./health-monitor
+      dockerfile: Dockerfile
+    container_name: commerce-health-monitor
+    ports:
+      - "8086:8086"
+    depends_on:
+      - auth-service
+      - catalog-service
+      - cart-service
+      - checkout-service
+      - storage-service
+    networks:
+      - commerce-network
+    restart: unless-stopped
+
   # Web Application (React)
   web-app:
     build:

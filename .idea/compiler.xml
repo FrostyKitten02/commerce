@@ -8,6 +8,8 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="exception-handling" />
+        <module name="health-monitor" />
+        <module name="product-name-generator" />
         <module name="auth-common" />
         <module name="auth" />
       </profile>
@@ -39,6 +41,8 @@
       <module name="checkout" options="-parameters" />
       <module name="commerce" options="-parameters" />
       <module name="exception-handling" options="" />
+      <module name="health-monitor" options="-parameters" />
+      <module name="product-name-generator" options="-parameters" />
     </option>
   </component>
 </project>
