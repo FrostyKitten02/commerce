@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import si.afridau.commerce.healthmonitor.model.HealthReport;
 import si.afridau.commerce.healthmonitor.model.ServiceStatus;
+import si.afridau.commerce.healthmonitor.model.StatusEntry;
+import si.afridau.commerce.healthmonitor.model.SystemMetrics;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -33,8 +35,10 @@ public class HealthCheckService {
     private String productNameGeneratorUrl;
 
     private final RestTemplate restTemplate;
+    private final SystemMetricsService systemMetricsService;
 
-    public HealthCheckService() {
+    public HealthCheckService(SystemMetricsService systemMetricsService) {
+        this.systemMetricsService = systemMetricsService;
         this.restTemplate = new RestTemplate();
         this.restTemplate.getInterceptors().add((request, body, execution) -> {
             request.getHeaders().add("User-Agent", "HealthMonitor/1.0");
@@ -68,6 +72,9 @@ public class HealthCheckService {
             report.setOverallStatus("PARTIAL");
         }
 
+        // Add system metrics to the report
+        report.setSystemMetrics(systemMetricsService.getSystemMetrics());
+
         return report;
     }
 
@@ -82,6 +89,9 @@ public class HealthCheckService {
             status.setStatus("UP");
             status.setResponseTime(responseTime);
             status.setLastChecked(LocalDateTime.now());
+            
+            // Add to history
+            status.addStatusEntry(new StatusEntry(LocalDateTime.now(), "UP", responseTime, null));
         } catch (Exception e) {
             long responseTime = System.currentTimeMillis() - startTime;
             
@@ -89,6 +99,9 @@ public class HealthCheckService {
             status.setResponseTime(responseTime);
             status.setErrorMessage(e.getMessage());
             status.setLastChecked(LocalDateTime.now());
+            
+            // Add to history
+            status.addStatusEntry(new StatusEntry(LocalDateTime.now(), "DOWN", responseTime, e.getMessage()));
         }
 
         return status;

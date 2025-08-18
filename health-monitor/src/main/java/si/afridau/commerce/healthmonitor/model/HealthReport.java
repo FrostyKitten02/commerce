@@ -10,6 +10,7 @@ public class HealthReport {
     private int servicesDown;
     private LocalDateTime reportTime;
     private List<ServiceStatus> services;
+    private SystemMetrics systemMetrics;
 
     public HealthReport() {
         this.reportTime = LocalDateTime.now();
@@ -61,5 +62,13 @@ public class HealthReport {
 
     public void setServices(List<ServiceStatus> services) {
         this.services = services;
+    }
+
+    public SystemMetrics getSystemMetrics() {
+        return systemMetrics;
+    }
+
+    public void setSystemMetrics(SystemMetrics systemMetrics) {
+        this.systemMetrics = systemMetrics;
     }
 }

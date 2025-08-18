@@ -1,6 +1,8 @@
 package si.afridau.commerce.healthmonitor.model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ServiceStatus {
     private String serviceName;
@@ -9,6 +11,7 @@ public class ServiceStatus {
     private long responseTime;
     private LocalDateTime lastChecked;
     private String errorMessage;
+    private List<StatusEntry> statusHistory = new ArrayList<>();
 
     public ServiceStatus() {}
 
@@ -64,5 +67,21 @@ public class ServiceStatus {
 
     public void setErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
+    }
+
+    public List<StatusEntry> getStatusHistory() {
+        return statusHistory;
+    }
+
+    public void setStatusHistory(List<StatusEntry> statusHistory) {
+        this.statusHistory = statusHistory;
+    }
+
+    public void addStatusEntry(StatusEntry entry) {
+        this.statusHistory.add(entry);
+        // Keep only last 10 entries
+        if (this.statusHistory.size() > 10) {
+            this.statusHistory.remove(0);
+        }
     }
 }
