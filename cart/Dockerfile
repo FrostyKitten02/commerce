@@ -14,5 +14,8 @@ EXPOSE 8002
 ENV SPRING_PROFILES_ACTIVE=docker
 ENV SERVER_PORT=8002
 
-# Run the application
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Create directory for external config
+RUN mkdir -p /app/config
+
+# Run the application with support for external config
+ENTRYPOINT ["java", "-jar", "app.jar", "--spring.config.additional-location=optional:file:/app/config/"]
