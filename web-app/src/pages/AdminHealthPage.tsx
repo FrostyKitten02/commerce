@@ -29,7 +29,8 @@ import {
 } from '@mui/icons-material';
 import StorageUtil from "../util/StorageUtil";
 import {useNavigate} from "react-router-dom";
-import { HealthMonitorService, HealthReport, ServiceStatus } from "../services/HealthMonitorService";
+import RequestUtil from "../util/RequestUtil";
+import {HealthReport, ServiceStatus} from "../../client/healthCheck";
 
 export default function AdminHealthPage() {
     const [healthReport, setHealthReport] = useState<HealthReport | null>(null);
@@ -55,10 +56,8 @@ export default function AdminHealthPage() {
         setError('');
         
         try {
-            const config = await ConfigUtil.getConfig();
-            const healthMonitorUrl = config.healthMonitorUrl || 'http://localhost:8086';
-            
-            const response = await axios.get(`${healthMonitorUrl}/api/health/status`);
+            const healthApi = RequestUtil.createHealthMonitorApi();
+            const response = await healthApi.getHealthStatus();
             setHealthReport(response.data);
             setLastRefresh(new Date());
         } catch (error: any) {

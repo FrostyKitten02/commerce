@@ -19,13 +19,14 @@ import {
     Chip,
     Input
 } from '@mui/material';
-import {Add, Logout, Edit, Delete} from '@mui/icons-material';
+import {Add, Logout, Edit, Delete, AutoAwesome} from '@mui/icons-material';
 import axios from 'axios';
 import RequestUtil from "../util/RequestUtil";
 import StorageUtil from "../util/StorageUtil";
 import {ImageUtil} from "../util/ImageUtil";
 import {useNavigate} from "react-router-dom";
 import {CreateProductDto, ProductDto, UpdateProductDto} from "../../client/catalog";
+import {GenerateNameRequest} from "../../client/productNameGenerator";
 
 interface ProductFormData {
     sku: string;
@@ -42,6 +43,7 @@ export default function AdminProductsPage() {
     const [success, setSuccess] = useState('');
     const [open, setOpen] = useState(false);
     const [editingProduct, setEditingProduct] = useState<ProductDto | null>(null);
+    const [generatingName, setGeneratingName] = useState(false);
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState<ProductFormData>({
@@ -251,6 +253,35 @@ export default function AdminProductsPage() {
         }
     };
 
+    const handleGenerateName = async () => {
+        setGeneratingName(true);
+        setError('');
+
+        try {
+            const productNameApi = RequestUtil.createProductNameGeneratorApi();
+            const request: GenerateNameRequest = {
+                category: 'ELECTRONICS', // Default category
+                keywords: formData.description ? formData.description.split(' ').slice(0, 3) : []
+            };
+            
+            const response = await productNameApi.generateProductName(request);
+            if (response.data.generatedNames && response.data.generatedNames.length > 0) {
+                setFormData(prev => ({
+                    ...prev,
+                    name: response.data.generatedNames[0]
+                }));
+                setSuccess('Product name generated successfully!');
+            } else {
+                setError('No names were generated. Please try again.');
+            }
+        } catch (error: any) {
+            console.error('Error generating product name:', error);
+            setError('Error generating product name. Please try again.');
+        } finally {
+            setGeneratingName(false);
+        }
+    };
+
     return (
         <Box>
             <AppBar position="static" color="error">
@@ -390,18 +421,29 @@ export default function AdminProductsPage() {
                         sx={{ mb: 2 }}
                         placeholder="e.g. PROD-001"
                     />
-                    <TextField
-                        margin="dense"
-                        name="name"
-                        label="Product Name"
-                        type="text"
-                        fullWidth
-                        variant="outlined"
-                        value={formData.name}
-                        onChange={handleChange}
-                        required
-                        sx={{ mb: 2 }}
-                    />
+                    <Box sx={{ mb: 2 }}>
+                        <TextField
+                            margin="dense"
+                            name="name"
+                            label="Product Name"
+                            type="text"
+                            fullWidth
+                            variant="outlined"
+                            value={formData.name}
+                            onChange={handleChange}
+                            required
+                        />
+                        <Button
+                            variant="outlined"
+                            startIcon={<AutoAwesome />}
+                            onClick={handleGenerateName}
+                            disabled={generatingName || loading}
+                            sx={{ mt: 1 }}
+                            size="small"
+                        >
+                            {generatingName ? 'Generating...' : 'Generate Creative Name'}
+                        </Button>
+                    </Box>
                     <TextField
                         margin="dense"
                         name="description"

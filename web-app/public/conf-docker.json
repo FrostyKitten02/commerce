@@ -6,6 +6,6 @@
     "storage" : "http://localhost:8003/api",
     "checkout" : "http://localhost:8004/api"
   },
-  "healthMonitorUrl" : "http://localhost:8086",
-  "productNameGeneratorUrl" : "http://localhost:8087"
+  "healthMonitorUrl" : "http://localhost:8086/api",
+  "productNameGeneratorUrl" : "http://localhost:8087/api"
 }

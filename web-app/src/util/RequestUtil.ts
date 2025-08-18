@@ -2,6 +2,8 @@ import {AuthControllerApi, Configuration as AuthConfig} from "../../client/auth"
 import {Configuration as CatalogConfig, ProductControllerApi} from "../../client/catalog";
 import {CartControllerApi, Configuration as CartConfig} from "../../client/cart";
 import {CheckoutControllerApi, Configuration as CheckoutConfig} from "../../client/checkout";
+import {HealthMonitorApi, Configuration as HealthConfig} from "../../client/healthCheck";
+import {ProductNameGeneratorApi, Configuration as ProductNameConfig} from "../../client/productNameGenerator";
 import {ConfigUtil} from "./ConfigUtil";
 import {RawAxiosRequestConfig} from "axios";
 import StorageUtil from "./StorageUtil";
@@ -39,6 +41,14 @@ export default class RequestUtil {
         return new CheckoutControllerApi(RequestUtil.createCheckoutConfig());
     }
 
+    public static createHealthMonitorApi() {
+        return new HealthMonitorApi(RequestUtil.createHealthConfig());
+    }
+
+    public static createProductNameGeneratorApi() {
+        return new ProductNameGeneratorApi(RequestUtil.createProductNameConfig());
+    }
+
     private static createAuthConfig(): AuthConfig {
         const conf = ConfigUtil.getConfig();
 
@@ -68,6 +78,22 @@ export default class RequestUtil {
 
         return new CheckoutConfig({
             basePath: conf.baseUrl.checkout
+        });
+    }
+
+    private static createHealthConfig(): HealthConfig {
+        const conf = ConfigUtil.getConfig();
+
+        return new HealthConfig({
+            basePath: conf.healthMonitorUrl
+        });
+    }
+
+    private static createProductNameConfig(): ProductNameConfig {
+        const conf = ConfigUtil.getConfig();
+
+        return new ProductNameConfig({
+            basePath: conf.productNameGeneratorUrl
         });
     }
 
