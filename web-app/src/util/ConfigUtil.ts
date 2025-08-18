@@ -17,6 +17,8 @@ interface NullableConfig {
         cart?: string,
         storage?: string,
         checkout?: string
+        healthCheck?: string,
+        productNameGenerator?: string
     }
 }
 

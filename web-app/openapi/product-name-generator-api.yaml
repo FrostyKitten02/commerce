@@ -1,0 +1,139 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+- url: http://localhost:8087/api
+  description: Generated server url
+tags:
+- name: Product Name Generator
+  description: API for generating creative product names
+paths:
+  /api/generate-name:
+    post:
+      tags:
+      - Product Name Generator
+      summary: Generate product names
+      description: Generate creative product names based on keywords and category
+      operationId: generateProductName
+      requestBody:
+        description: "Request containing keywords, category, and count"
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GenerateNameRequest"
+        required: true
+      responses:
+        "200":
+          description: Product names generated successfully
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/GenerateNameResponse"
+        "500":
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/GenerateNameResponse"
+  /api/health:
+    get:
+      tags:
+      - Product Name Generator
+      summary: Health check
+      description: Simple health check endpoint
+      operationId: health
+      responses:
+        "200":
+          description: Service is healthy
+          content:
+            '*/*':
+              schema:
+                type: string
+  /api/generate-name/simple:
+    get:
+      tags:
+      - Product Name Generator
+      summary: Generate product names (simple)
+      description: Generate product names using query parameters for easy testing
+      operationId: generateSimpleProductName
+      parameters:
+      - name: keywords
+        in: query
+        description: Comma-separated keywords
+        required: false
+        schema:
+          type: string
+        example: "wireless,bluetooth"
+      - name: category
+        in: query
+        description: Product category
+        required: false
+        schema:
+          type: string
+        example: electronics
+      - name: count
+        in: query
+        description: Number of suggestions to generate
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 5
+        example: 5
+      responses:
+        "200":
+          description: Product names generated successfully
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/GenerateNameResponse"
+        "500":
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/GenerateNameResponse"
+  /api/categories:
+    get:
+      tags:
+      - Product Name Generator
+      summary: Get available categories
+      description: Returns list of supported product categories
+      operationId: getAvailableCategories
+      responses:
+        "200":
+          description: Categories retrieved successfully
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  type: string
+components:
+  schemas:
+    GenerateNameRequest:
+      type: object
+      properties:
+        keywords:
+          type: array
+          items:
+            type: string
+        category:
+          type: string
+        count:
+          type: integer
+          format: int32
+    GenerateNameResponse:
+      type: object
+      properties:
+        suggestions:
+          type: array
+          items:
+            type: string
+        category:
+          type: string
+        usedKeywords:
+          type: array
+          items:
+            type: string

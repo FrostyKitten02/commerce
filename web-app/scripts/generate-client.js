@@ -32,7 +32,17 @@ const services = [
     name: 'checkout',
     yamlFile: 'checkout-api.yaml',
     packageName: 'checkout-client'
-  }
+  },
+  {
+    name: 'healthCheck',
+    yamlFile: 'health-check-api.yaml',
+    packageName: 'health-check-client'
+  },
+  {
+    name: 'productNameGenerator',
+    yamlFile: 'product-name-generator-api.yaml',
+    packageName: 'product-name-generator-client'
+  },
 ];
 
 function generateClient(service) {

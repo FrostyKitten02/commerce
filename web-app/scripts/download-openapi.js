@@ -30,7 +30,17 @@ const services = [
     name: 'checkout',
     url: 'http://localhost:8004/api/docs.yaml',
     outputFile: 'checkout-api.yaml'
-  }
+  },
+  {
+    name: 'healthCheck',
+    url: 'http://localhost:8086/api/docs.yaml',
+    outputFile: 'health-check-api.yaml',
+  },
+  {
+    name: 'productNameGenerator',
+    url: 'http://localhost:8087/api/docs.yaml',
+    outputFile: 'product-name-generator-api.yaml',
+  },
 ];
 
 async function downloadOpenApiSpec(service) {

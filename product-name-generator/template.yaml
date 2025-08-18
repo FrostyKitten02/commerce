@@ -1,0 +1,38 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Product Name Generator Lambda Function
+
+Globals:
+  Function:
+    Timeout: 30
+    MemorySize: 512
+    Runtime: java21
+
+Resources:
+  ProductNameGeneratorFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: target/product-name-generator-0.0.1-SNAPSHOT.jar
+      Handler: si.afridau.commerce.productname.lambda.ProductNameLambdaHandler::handleRequest
+      Runtime: java21
+      Timeout: 30
+      MemorySize: 512
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /{proxy+}
+            Method: ANY
+        Root:
+          Type: Api
+          Properties:
+            Path: /
+            Method: ANY
+
+Outputs:
+  ProductNameGeneratorApi:
+    Description: "API Gateway endpoint URL for Product Name Generator function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
+  ProductNameGeneratorFunction:
+    Description: "Product Name Generator Lambda Function ARN"
+    Value: !GetAtt ProductNameGeneratorFunction.Arn

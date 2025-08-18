@@ -27,28 +27,9 @@ import {
     Speed,
     Computer
 } from '@mui/icons-material';
-import axios from 'axios';
 import StorageUtil from "../util/StorageUtil";
 import {useNavigate} from "react-router-dom";
-import {ConfigUtil} from "../util/ConfigUtil";
-
-interface ServiceStatus {
-    serviceName: string;
-    status: string;
-    url: string;
-    responseTime: number;
-    lastChecked: string;
-    errorMessage?: string;
-}
-
-interface HealthReport {
-    overallStatus: string;
-    totalServices: number;
-    servicesUp: number;
-    servicesDown: number;
-    reportTime: string;
-    services: ServiceStatus[];
-}
+import { HealthMonitorService, HealthReport, ServiceStatus } from "../services/HealthMonitorService";
 
 export default function AdminHealthPage() {
     const [healthReport, setHealthReport] = useState<HealthReport | null>(null);
