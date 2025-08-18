@@ -265,10 +265,10 @@ export default function AdminProductsPage() {
             };
             
             const response = await productNameApi.generateProductName(request);
-            if (response.data.generatedNames && response.data.generatedNames.length > 0) {
+            if (!!response.data.suggestions && response.data.suggestions.length > 0) {
                 setFormData(prev => ({
                     ...prev,
-                    name: response.data.generatedNames[0]
+                    name: response.data.suggestions![0]
                 }));
                 setSuccess('Product name generated successfully!');
             } else {
