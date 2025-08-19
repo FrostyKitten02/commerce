@@ -33,6 +33,21 @@ cd checkout
 mvn clean install -DskipTests
 cd ..
 
+echo "Building health-monitor service..."
+cd health-monitor
+mvn clean install -DskipTests
+cd ..
+
+echo "Building product-name-generator service..."
+cd product-name-generator
+mvn clean install -DskipTests
+cd ..
+
+echo "Building storage service..."
+cd storage
+go build -o storage .
+cd ..
+
 echo "Building web-app..."
 cd web-app
 npm install
