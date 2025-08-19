@@ -3,6 +3,16 @@
 # Build all Java services
 echo "Building Java services..."
 
+echo "Building auth-common..."
+cd auth-common
+mvn clean install -DskipTests
+cd ..
+
+echo "Building exception-handling..."
+cd exception-handling
+mvn clean install -DskipTests
+cd ..
+
 echo "Building auth service..."
 cd auth
 mvn clean install -DskipTests
@@ -20,16 +30,6 @@ cd ..
 
 echo "Building checkout service..."
 cd checkout
-mvn clean install -DskipTests
-cd ..
-
-echo "Building auth-common..."
-cd auth-common
-mvn clean install -DskipTests
-cd ..
-
-echo "Building exception-handling..."
-cd exception-handling
 mvn clean install -DskipTests
 cd ..
 
