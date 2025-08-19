@@ -42,17 +42,15 @@ export default function RegisterPage() {
         try {
             const authApi = RequestUtil.createAuthApi();
             
-            await authApi.registerUser({
-                registerRequest: {
-                    firstname: firstName,
-                    lastname: lastName,
-                    email: email,
-                    password: password
-                }
+            await authApi.register({
+                firstname: firstName,
+                lastname: lastName,
+                email: email,
+                password: password
             });
 
             // Registration successful, redirect to login
-            navigate('/log-in?message=Registration successful! Please log in.');
+            navigate('/log-in');
         } catch (error: any) {
             console.error('Registration failed:', error);
             setError(error.response?.data?.message || 'Registration failed. Please try again.');
