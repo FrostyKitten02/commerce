@@ -1,9 +1,9 @@
-import {AuthControllerApi, Configuration as AuthConfig} from "../../client/auth";
-import {Configuration as CatalogConfig, ProductControllerApi} from "../../client/catalog";
-import {CartControllerApi, Configuration as CartConfig} from "../../client/cart";
-import {CheckoutControllerApi, Configuration as CheckoutConfig} from "../../client/checkout";
-import {HealthMonitorApi, Configuration as HealthConfig} from "../../client/healthCheck";
-import {ProductNameGeneratorApi, Configuration as ProductNameConfig} from "../../client/productNameGenerator";
+import {AuthenticationApi as AuthControllerApi, Configuration as AuthConfig} from "../../client/auth";
+import {ProductCatalogApi as ProductControllerApi ,Configuration as CatalogConfig} from "../../client/catalog";
+import {ShoppingCartApi as CartControllerApi ,Configuration as CartConfig} from "../../client/cart";
+import {CheckoutApi as CheckoutControllerApi ,Configuration as CheckoutConfig} from "../../client/checkout";
+import {Configuration as HealthConfig, HealthMonitorApi} from "../../client/healthCheck";
+import {Configuration as ProductNameConfig, ProductNameGeneratorApi} from "../../client/productNameGenerator";
 import {ConfigUtil} from "./ConfigUtil";
 import {RawAxiosRequestConfig} from "axios";
 import StorageUtil from "./StorageUtil";
@@ -85,7 +85,7 @@ export default class RequestUtil {
         const conf = ConfigUtil.getConfig();
 
         return new HealthConfig({
-            basePath: conf.healthMonitorUrl
+            basePath: conf.baseUrl.healthCheck
         });
     }
 
@@ -93,7 +93,7 @@ export default class RequestUtil {
         const conf = ConfigUtil.getConfig();
 
         return new ProductNameConfig({
-            basePath: conf.productNameGeneratorUrl
+            basePath: conf.baseUrl.productNameGenerator
         });
     }
 

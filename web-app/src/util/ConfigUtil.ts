@@ -6,7 +6,9 @@ export interface Config {
         catalog: string,
         cart: string,
         storage: string,
-        checkout: string
+        checkout: string,
+        healthCheck: string,
+        productNameGenerator: string
     }
 }
 
@@ -60,7 +62,9 @@ export class ConfigUtil {
             StringUtil.emptyOrNull(conf.baseUrl.cart) &&
             StringUtil.emptyOrNull(conf.baseUrl.catalog) &&
             StringUtil.emptyOrNull(conf.baseUrl.storage) &&
-            StringUtil.emptyOrNull(conf.baseUrl.checkout)
+            StringUtil.emptyOrNull(conf.baseUrl.checkout) &&
+            StringUtil.emptyOrNull(conf.baseUrl.healthCheck) &&
+            StringUtil.emptyOrNull(conf.baseUrl.productNameGenerator)
         ) {
             throw new Error("Missing base at least one base url")
         }
