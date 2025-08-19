@@ -36,7 +36,6 @@ import java.security.Principal;
 import java.util.UUID;
 
 @Validated
-@CrossOrigin
 @RestController
 @RequestMapping("carts")
 @RequiredArgsConstructor
