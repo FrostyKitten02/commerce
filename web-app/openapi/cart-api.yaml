@@ -7,11 +7,16 @@ servers:
   description: Generated server url
 security:
 - bearerAuth: []
+tags:
+- name: Shopping Cart
+  description: Shopping cart management endpoints
 paths:
   /carts/{cartId}:
     post:
       tags:
-      - cart-controller
+      - Shopping Cart
+      summary: Add item to cart
+      description: Add a product to the user's shopping cart with specified quantity
       operationId: addToCart
       parameters:
       - name: cartId
@@ -28,10 +33,18 @@ paths:
         required: true
       responses:
         "200":
-          description: OK
+          description: Item added to cart successfully
+        "404":
+          description: Product not found
+        "401":
+          description: Authentication required
+      security:
+      - Bearer Authentication: []
     delete:
       tags:
-      - cart-controller
+      - Shopping Cart
+      summary: Remove item from cart
+      description: Remove a specific item completely from the user's shopping cart
       operationId: removeFromCart
       parameters:
       - name: cartId
@@ -42,11 +55,19 @@ paths:
           format: uuid
       responses:
         "200":
-          description: OK
+          description: Item removed successfully
+        "401":
+          description: Authentication required
+        "404":
+          description: Cart item not found
+      security:
+      - Bearer Authentication: []
   /carts/product/{cartProductId}/{quantity}:
     patch:
       tags:
-      - cart-controller
+      - Shopping Cart
+      summary: Update item quantity
+      description: Update the quantity of a specific item in the user's shopping cart
       operationId: updateQuantity
       parameters:
       - name: cartProductId
@@ -63,26 +84,50 @@ paths:
           type: number
       responses:
         "200":
-          description: OK
+          description: Quantity updated successfully
+        "401":
+          description: Authentication required
+        "404":
+          description: Cart item not found
+      security:
+      - Bearer Authentication: []
   /carts:
     get:
       tags:
-      - cart-controller
+      - Shopping Cart
+      summary: Get user's cart
+      description: Retrieve the current authenticated user's shopping cart with all
+        items and total price
       operationId: getCart
       responses:
         "200":
-          description: OK
+          description: Cart retrieved successfully
           content:
             '*/*':
               schema:
                 $ref: "#/components/schemas/GetCartRes"
+        "401":
+          description: Authentication required
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/GetCartRes"
+      security:
+      - Bearer Authentication: []
     delete:
       tags:
-      - cart-controller
+      - Shopping Cart
+      summary: Clear user's cart
+      description: Delete all items from the current authenticated user's shopping
+        cart
       operationId: deleteCart
       responses:
         "200":
-          description: OK
+          description: Cart cleared successfully
+        "401":
+          description: Authentication required
+      security:
+      - Bearer Authentication: []
 components:
   schemas:
     AddToCartReq:

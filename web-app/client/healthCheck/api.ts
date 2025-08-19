@@ -65,6 +65,12 @@ export interface HealthReport {
      * @memberof HealthReport
      */
     'services'?: Array<ServiceStatus>;
+    /**
+     * 
+     * @type {SystemMetrics}
+     * @memberof HealthReport
+     */
+    'systemMetrics'?: SystemMetrics;
 }
 /**
  * 
@@ -108,6 +114,80 @@ export interface ServiceStatus {
      * @memberof ServiceStatus
      */
     'errorMessage'?: string;
+    /**
+     * 
+     * @type {Array<StatusEntry>}
+     * @memberof ServiceStatus
+     */
+    'statusHistory'?: Array<StatusEntry>;
+}
+/**
+ * 
+ * @export
+ * @interface StatusEntry
+ */
+export interface StatusEntry {
+    /**
+     * 
+     * @type {string}
+     * @memberof StatusEntry
+     */
+    'timestamp'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof StatusEntry
+     */
+    'status'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof StatusEntry
+     */
+    'responseTime'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof StatusEntry
+     */
+    'errorMessage'?: string;
+}
+/**
+ * 
+ * @export
+ * @interface SystemMetrics
+ */
+export interface SystemMetrics {
+    /**
+     * 
+     * @type {string}
+     * @memberof SystemMetrics
+     */
+    'uptime'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SystemMetrics
+     */
+    'memoryUsage'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SystemMetrics
+     */
+    'diskUsage'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SystemMetrics
+     */
+    'cpuUsage'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SystemMetrics
+     */
+    'lastUpdated'?: string;
 }
 
 /**
@@ -117,7 +197,7 @@ export interface ServiceStatus {
 export const HealthMonitorApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Returns health status for a specific service
+         * Returns detailed health status for a specific service including response time, last check time, and error details if any
          * @summary Check specific service health
          * @param {string} serviceName Name of the service to check
          * @param {*} [options] Override http request option.
@@ -151,7 +231,7 @@ export const HealthMonitorApiAxiosParamCreator = function (configuration?: Confi
             };
         },
         /**
-         * Returns list of all services being monitored
+         * Returns map of all services being monitored with their service names and base URLs
          * @summary Get available services
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -181,7 +261,7 @@ export const HealthMonitorApiAxiosParamCreator = function (configuration?: Confi
             };
         },
         /**
-         * Returns health status report for all monitored microservices
+         * Returns comprehensive health status report for all monitored microservices including response times, status counts, and system metrics
          * @summary Get overall health status
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -221,7 +301,7 @@ export const HealthMonitorApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = HealthMonitorApiAxiosParamCreator(configuration)
     return {
         /**
-         * Returns health status for a specific service
+         * Returns detailed health status for a specific service including response time, last check time, and error details if any
          * @summary Check specific service health
          * @param {string} serviceName Name of the service to check
          * @param {*} [options] Override http request option.
@@ -234,7 +314,7 @@ export const HealthMonitorApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Returns list of all services being monitored
+         * Returns map of all services being monitored with their service names and base URLs
          * @summary Get available services
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -246,7 +326,7 @@ export const HealthMonitorApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Returns health status report for all monitored microservices
+         * Returns comprehensive health status report for all monitored microservices including response times, status counts, and system metrics
          * @summary Get overall health status
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -268,7 +348,7 @@ export const HealthMonitorApiFactory = function (configuration?: Configuration, 
     const localVarFp = HealthMonitorApiFp(configuration)
     return {
         /**
-         * Returns health status for a specific service
+         * Returns detailed health status for a specific service including response time, last check time, and error details if any
          * @summary Check specific service health
          * @param {string} serviceName Name of the service to check
          * @param {*} [options] Override http request option.
@@ -278,7 +358,7 @@ export const HealthMonitorApiFactory = function (configuration?: Configuration, 
             return localVarFp.checkSpecificService(serviceName, options).then((request) => request(axios, basePath));
         },
         /**
-         * Returns list of all services being monitored
+         * Returns map of all services being monitored with their service names and base URLs
          * @summary Get available services
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -287,7 +367,7 @@ export const HealthMonitorApiFactory = function (configuration?: Configuration, 
             return localVarFp.getAvailableServices(options).then((request) => request(axios, basePath));
         },
         /**
-         * Returns health status report for all monitored microservices
+         * Returns comprehensive health status report for all monitored microservices including response times, status counts, and system metrics
          * @summary Get overall health status
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -305,7 +385,7 @@ export const HealthMonitorApiFactory = function (configuration?: Configuration, 
  */
 export interface HealthMonitorApiInterface {
     /**
-     * Returns health status for a specific service
+     * Returns detailed health status for a specific service including response time, last check time, and error details if any
      * @summary Check specific service health
      * @param {string} serviceName Name of the service to check
      * @param {*} [options] Override http request option.
@@ -315,7 +395,7 @@ export interface HealthMonitorApiInterface {
     checkSpecificService(serviceName: string, options?: RawAxiosRequestConfig): AxiosPromise<ServiceStatus>;
 
     /**
-     * Returns list of all services being monitored
+     * Returns map of all services being monitored with their service names and base URLs
      * @summary Get available services
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -324,7 +404,7 @@ export interface HealthMonitorApiInterface {
     getAvailableServices(options?: RawAxiosRequestConfig): AxiosPromise<{ [key: string]: string; }>;
 
     /**
-     * Returns health status report for all monitored microservices
+     * Returns comprehensive health status report for all monitored microservices including response times, status counts, and system metrics
      * @summary Get overall health status
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -342,7 +422,7 @@ export interface HealthMonitorApiInterface {
  */
 export class HealthMonitorApi extends BaseAPI implements HealthMonitorApiInterface {
     /**
-     * Returns health status for a specific service
+     * Returns detailed health status for a specific service including response time, last check time, and error details if any
      * @summary Check specific service health
      * @param {string} serviceName Name of the service to check
      * @param {*} [options] Override http request option.
@@ -354,7 +434,7 @@ export class HealthMonitorApi extends BaseAPI implements HealthMonitorApiInterfa
     }
 
     /**
-     * Returns list of all services being monitored
+     * Returns map of all services being monitored with their service names and base URLs
      * @summary Get available services
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -365,7 +445,7 @@ export class HealthMonitorApi extends BaseAPI implements HealthMonitorApiInterfa
     }
 
     /**
-     * Returns health status report for all monitored microservices
+     * Returns comprehensive health status report for all monitored microservices including response times, status counts, and system metrics
      * @summary Get overall health status
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}

@@ -191,13 +191,14 @@ export interface SubmitCartReq {
 }
 
 /**
- * CheckoutControllerApi - axios parameter creator
+ * CheckoutApi - axios parameter creator
  * @export
  */
-export const CheckoutControllerApiAxiosParamCreator = function (configuration?: Configuration) {
+export const CheckoutApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * 
+         * Retrieve all orders placed by the current authenticated user with order details and status
+         * @summary Get user orders
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -230,7 +231,8 @@ export const CheckoutControllerApiAxiosParamCreator = function (configuration?: 
             };
         },
         /**
-         * 
+         * Process the user\'s shopping cart and create an order with billing and shipping information
+         * @summary Submit cart for checkout
          * @param {SubmitCartReq} submitCartReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -272,25 +274,27 @@ export const CheckoutControllerApiAxiosParamCreator = function (configuration?: 
 };
 
 /**
- * CheckoutControllerApi - functional programming interface
+ * CheckoutApi - functional programming interface
  * @export
  */
-export const CheckoutControllerApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = CheckoutControllerApiAxiosParamCreator(configuration)
+export const CheckoutApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = CheckoutApiAxiosParamCreator(configuration)
     return {
         /**
-         * 
+         * Retrieve all orders placed by the current authenticated user with order details and status
+         * @summary Get user orders
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getUserOrders(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<OrderDto>>> {
+        async getUserOrders(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<OrderDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getUserOrders(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['CheckoutControllerApi.getUserOrders']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['CheckoutApi.getUserOrders']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
+         * Process the user\'s shopping cart and create an order with billing and shipping information
+         * @summary Submit cart for checkout
          * @param {SubmitCartReq} submitCartReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -298,29 +302,31 @@ export const CheckoutControllerApiFp = function(configuration?: Configuration) {
         async submitCart(submitCartReq: SubmitCartReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<OrderCreatedRes>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.submitCart(submitCartReq, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['CheckoutControllerApi.submitCart']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['CheckoutApi.submitCart']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
 
 /**
- * CheckoutControllerApi - factory interface
+ * CheckoutApi - factory interface
  * @export
  */
-export const CheckoutControllerApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = CheckoutControllerApiFp(configuration)
+export const CheckoutApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = CheckoutApiFp(configuration)
     return {
         /**
-         * 
+         * Retrieve all orders placed by the current authenticated user with order details and status
+         * @summary Get user orders
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getUserOrders(options?: RawAxiosRequestConfig): AxiosPromise<Array<OrderDto>> {
+        getUserOrders(options?: RawAxiosRequestConfig): AxiosPromise<OrderDto> {
             return localVarFp.getUserOrders(options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Process the user\'s shopping cart and create an order with billing and shipping information
+         * @summary Submit cart for checkout
          * @param {SubmitCartReq} submitCartReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -332,56 +338,60 @@ export const CheckoutControllerApiFactory = function (configuration?: Configurat
 };
 
 /**
- * CheckoutControllerApi - interface
+ * CheckoutApi - interface
  * @export
- * @interface CheckoutControllerApi
+ * @interface CheckoutApi
  */
-export interface CheckoutControllerApiInterface {
+export interface CheckoutApiInterface {
     /**
-     * 
+     * Retrieve all orders placed by the current authenticated user with order details and status
+     * @summary Get user orders
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof CheckoutControllerApiInterface
+     * @memberof CheckoutApiInterface
      */
-    getUserOrders(options?: RawAxiosRequestConfig): AxiosPromise<Array<OrderDto>>;
+    getUserOrders(options?: RawAxiosRequestConfig): AxiosPromise<OrderDto>;
 
     /**
-     * 
+     * Process the user\'s shopping cart and create an order with billing and shipping information
+     * @summary Submit cart for checkout
      * @param {SubmitCartReq} submitCartReq 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof CheckoutControllerApiInterface
+     * @memberof CheckoutApiInterface
      */
     submitCart(submitCartReq: SubmitCartReq, options?: RawAxiosRequestConfig): AxiosPromise<OrderCreatedRes>;
 
 }
 
 /**
- * CheckoutControllerApi - object-oriented interface
+ * CheckoutApi - object-oriented interface
  * @export
- * @class CheckoutControllerApi
+ * @class CheckoutApi
  * @extends {BaseAPI}
  */
-export class CheckoutControllerApi extends BaseAPI implements CheckoutControllerApiInterface {
+export class CheckoutApi extends BaseAPI implements CheckoutApiInterface {
     /**
-     * 
+     * Retrieve all orders placed by the current authenticated user with order details and status
+     * @summary Get user orders
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof CheckoutControllerApi
+     * @memberof CheckoutApi
      */
     public getUserOrders(options?: RawAxiosRequestConfig) {
-        return CheckoutControllerApiFp(this.configuration).getUserOrders(options).then((request) => request(this.axios, this.basePath));
+        return CheckoutApiFp(this.configuration).getUserOrders(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * 
+     * Process the user\'s shopping cart and create an order with billing and shipping information
+     * @summary Submit cart for checkout
      * @param {SubmitCartReq} submitCartReq 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof CheckoutControllerApi
+     * @memberof CheckoutApi
      */
     public submitCart(submitCartReq: SubmitCartReq, options?: RawAxiosRequestConfig) {
-        return CheckoutControllerApiFp(this.configuration).submitCart(submitCartReq, options).then((request) => request(this.axios, this.basePath));
+        return CheckoutApiFp(this.configuration).submitCart(submitCartReq, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

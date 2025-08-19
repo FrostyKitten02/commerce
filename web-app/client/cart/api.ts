@@ -137,13 +137,14 @@ export interface GetCartRes {
 }
 
 /**
- * CartControllerApi - axios parameter creator
+ * ShoppingCartApi - axios parameter creator
  * @export
  */
-export const CartControllerApiAxiosParamCreator = function (configuration?: Configuration) {
+export const ShoppingCartApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * 
+         * Add a product to the user\'s shopping cart with specified quantity
+         * @summary Add item to cart
          * @param {string} cartId 
          * @param {AddToCartReq} addToCartReq 
          * @param {*} [options] Override http request option.
@@ -186,7 +187,8 @@ export const CartControllerApiAxiosParamCreator = function (configuration?: Conf
             };
         },
         /**
-         * 
+         * Delete all items from the current authenticated user\'s shopping cart
+         * @summary Clear user\'s cart
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -219,7 +221,8 @@ export const CartControllerApiAxiosParamCreator = function (configuration?: Conf
             };
         },
         /**
-         * 
+         * Retrieve the current authenticated user\'s shopping cart with all items and total price
+         * @summary Get user\'s cart
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -252,7 +255,8 @@ export const CartControllerApiAxiosParamCreator = function (configuration?: Conf
             };
         },
         /**
-         * 
+         * Remove a specific item completely from the user\'s shopping cart
+         * @summary Remove item from cart
          * @param {string} cartId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -289,7 +293,8 @@ export const CartControllerApiAxiosParamCreator = function (configuration?: Conf
             };
         },
         /**
-         * 
+         * Update the quantity of a specific item in the user\'s shopping cart
+         * @summary Update item quantity
          * @param {string} cartProductId 
          * @param {number} quantity 
          * @param {*} [options] Override http request option.
@@ -333,14 +338,15 @@ export const CartControllerApiAxiosParamCreator = function (configuration?: Conf
 };
 
 /**
- * CartControllerApi - functional programming interface
+ * ShoppingCartApi - functional programming interface
  * @export
  */
-export const CartControllerApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = CartControllerApiAxiosParamCreator(configuration)
+export const ShoppingCartApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = ShoppingCartApiAxiosParamCreator(configuration)
     return {
         /**
-         * 
+         * Add a product to the user\'s shopping cart with specified quantity
+         * @summary Add item to cart
          * @param {string} cartId 
          * @param {AddToCartReq} addToCartReq 
          * @param {*} [options] Override http request option.
@@ -349,33 +355,36 @@ export const CartControllerApiFp = function(configuration?: Configuration) {
         async addToCart(cartId: string, addToCartReq: AddToCartReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.addToCart(cartId, addToCartReq, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['CartControllerApi.addToCart']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['ShoppingCartApi.addToCart']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
+         * Delete all items from the current authenticated user\'s shopping cart
+         * @summary Clear user\'s cart
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         async deleteCart(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.deleteCart(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['CartControllerApi.deleteCart']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['ShoppingCartApi.deleteCart']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
+         * Retrieve the current authenticated user\'s shopping cart with all items and total price
+         * @summary Get user\'s cart
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         async getCart(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetCartRes>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getCart(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['CartControllerApi.getCart']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['ShoppingCartApi.getCart']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
+         * Remove a specific item completely from the user\'s shopping cart
+         * @summary Remove item from cart
          * @param {string} cartId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -383,11 +392,12 @@ export const CartControllerApiFp = function(configuration?: Configuration) {
         async removeFromCart(cartId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.removeFromCart(cartId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['CartControllerApi.removeFromCart']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['ShoppingCartApi.removeFromCart']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
+         * Update the quantity of a specific item in the user\'s shopping cart
+         * @summary Update item quantity
          * @param {string} cartProductId 
          * @param {number} quantity 
          * @param {*} [options] Override http request option.
@@ -396,21 +406,22 @@ export const CartControllerApiFp = function(configuration?: Configuration) {
         async updateQuantity(cartProductId: string, quantity: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.updateQuantity(cartProductId, quantity, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['CartControllerApi.updateQuantity']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['ShoppingCartApi.updateQuantity']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
 
 /**
- * CartControllerApi - factory interface
+ * ShoppingCartApi - factory interface
  * @export
  */
-export const CartControllerApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = CartControllerApiFp(configuration)
+export const ShoppingCartApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = ShoppingCartApiFp(configuration)
     return {
         /**
-         * 
+         * Add a product to the user\'s shopping cart with specified quantity
+         * @summary Add item to cart
          * @param {string} cartId 
          * @param {AddToCartReq} addToCartReq 
          * @param {*} [options] Override http request option.
@@ -420,7 +431,8 @@ export const CartControllerApiFactory = function (configuration?: Configuration,
             return localVarFp.addToCart(cartId, addToCartReq, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Delete all items from the current authenticated user\'s shopping cart
+         * @summary Clear user\'s cart
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -428,7 +440,8 @@ export const CartControllerApiFactory = function (configuration?: Configuration,
             return localVarFp.deleteCart(options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Retrieve the current authenticated user\'s shopping cart with all items and total price
+         * @summary Get user\'s cart
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -436,7 +449,8 @@ export const CartControllerApiFactory = function (configuration?: Configuration,
             return localVarFp.getCart(options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Remove a specific item completely from the user\'s shopping cart
+         * @summary Remove item from cart
          * @param {string} cartId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -445,7 +459,8 @@ export const CartControllerApiFactory = function (configuration?: Configuration,
             return localVarFp.removeFromCart(cartId, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Update the quantity of a specific item in the user\'s shopping cart
+         * @summary Update item quantity
          * @param {string} cartProductId 
          * @param {number} quantity 
          * @param {*} [options] Override http request option.
@@ -458,118 +473,128 @@ export const CartControllerApiFactory = function (configuration?: Configuration,
 };
 
 /**
- * CartControllerApi - interface
+ * ShoppingCartApi - interface
  * @export
- * @interface CartControllerApi
+ * @interface ShoppingCartApi
  */
-export interface CartControllerApiInterface {
+export interface ShoppingCartApiInterface {
     /**
-     * 
+     * Add a product to the user\'s shopping cart with specified quantity
+     * @summary Add item to cart
      * @param {string} cartId 
      * @param {AddToCartReq} addToCartReq 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof CartControllerApiInterface
+     * @memberof ShoppingCartApiInterface
      */
     addToCart(cartId: string, addToCartReq: AddToCartReq, options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
     /**
-     * 
+     * Delete all items from the current authenticated user\'s shopping cart
+     * @summary Clear user\'s cart
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof CartControllerApiInterface
+     * @memberof ShoppingCartApiInterface
      */
     deleteCart(options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
     /**
-     * 
+     * Retrieve the current authenticated user\'s shopping cart with all items and total price
+     * @summary Get user\'s cart
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof CartControllerApiInterface
+     * @memberof ShoppingCartApiInterface
      */
     getCart(options?: RawAxiosRequestConfig): AxiosPromise<GetCartRes>;
 
     /**
-     * 
+     * Remove a specific item completely from the user\'s shopping cart
+     * @summary Remove item from cart
      * @param {string} cartId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof CartControllerApiInterface
+     * @memberof ShoppingCartApiInterface
      */
     removeFromCart(cartId: string, options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
     /**
-     * 
+     * Update the quantity of a specific item in the user\'s shopping cart
+     * @summary Update item quantity
      * @param {string} cartProductId 
      * @param {number} quantity 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof CartControllerApiInterface
+     * @memberof ShoppingCartApiInterface
      */
     updateQuantity(cartProductId: string, quantity: number, options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
 }
 
 /**
- * CartControllerApi - object-oriented interface
+ * ShoppingCartApi - object-oriented interface
  * @export
- * @class CartControllerApi
+ * @class ShoppingCartApi
  * @extends {BaseAPI}
  */
-export class CartControllerApi extends BaseAPI implements CartControllerApiInterface {
+export class ShoppingCartApi extends BaseAPI implements ShoppingCartApiInterface {
     /**
-     * 
+     * Add a product to the user\'s shopping cart with specified quantity
+     * @summary Add item to cart
      * @param {string} cartId 
      * @param {AddToCartReq} addToCartReq 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof CartControllerApi
+     * @memberof ShoppingCartApi
      */
     public addToCart(cartId: string, addToCartReq: AddToCartReq, options?: RawAxiosRequestConfig) {
-        return CartControllerApiFp(this.configuration).addToCart(cartId, addToCartReq, options).then((request) => request(this.axios, this.basePath));
+        return ShoppingCartApiFp(this.configuration).addToCart(cartId, addToCartReq, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * 
+     * Delete all items from the current authenticated user\'s shopping cart
+     * @summary Clear user\'s cart
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof CartControllerApi
+     * @memberof ShoppingCartApi
      */
     public deleteCart(options?: RawAxiosRequestConfig) {
-        return CartControllerApiFp(this.configuration).deleteCart(options).then((request) => request(this.axios, this.basePath));
+        return ShoppingCartApiFp(this.configuration).deleteCart(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * 
+     * Retrieve the current authenticated user\'s shopping cart with all items and total price
+     * @summary Get user\'s cart
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof CartControllerApi
+     * @memberof ShoppingCartApi
      */
     public getCart(options?: RawAxiosRequestConfig) {
-        return CartControllerApiFp(this.configuration).getCart(options).then((request) => request(this.axios, this.basePath));
+        return ShoppingCartApiFp(this.configuration).getCart(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * 
+     * Remove a specific item completely from the user\'s shopping cart
+     * @summary Remove item from cart
      * @param {string} cartId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof CartControllerApi
+     * @memberof ShoppingCartApi
      */
     public removeFromCart(cartId: string, options?: RawAxiosRequestConfig) {
-        return CartControllerApiFp(this.configuration).removeFromCart(cartId, options).then((request) => request(this.axios, this.basePath));
+        return ShoppingCartApiFp(this.configuration).removeFromCart(cartId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * 
+     * Update the quantity of a specific item in the user\'s shopping cart
+     * @summary Update item quantity
      * @param {string} cartProductId 
      * @param {number} quantity 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof CartControllerApi
+     * @memberof ShoppingCartApi
      */
     public updateQuantity(cartProductId: string, quantity: number, options?: RawAxiosRequestConfig) {
-        return CartControllerApiFp(this.configuration).updateQuantity(cartProductId, quantity, options).then((request) => request(this.axios, this.basePath));
+        return ShoppingCartApiFp(this.configuration).updateQuantity(cartProductId, quantity, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

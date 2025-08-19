@@ -14,7 +14,8 @@ paths:
       tags:
       - Health Monitor
       summary: Get overall health status
-      description: Returns health status report for all monitored microservices
+      description: "Returns comprehensive health status report for all monitored microservices\
+        \ including response times, status counts, and system metrics"
       operationId: getHealthStatus
       responses:
         "200":
@@ -28,7 +29,8 @@ paths:
       tags:
       - Health Monitor
       summary: Get available services
-      description: Returns list of all services being monitored
+      description: Returns map of all services being monitored with their service
+        names and base URLs
       operationId: getAvailableServices
       responses:
         "200":
@@ -44,7 +46,8 @@ paths:
       tags:
       - Health Monitor
       summary: Check specific service health
-      description: Returns health status for a specific service
+      description: "Returns detailed health status for a specific service including\
+        \ response time, last check time, and error details if any"
       operationId: checkSpecificService
       parameters:
       - name: serviceName
@@ -90,6 +93,8 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/ServiceStatus"
+        systemMetrics:
+          $ref: "#/components/schemas/SystemMetrics"
     ServiceStatus:
       type: object
       properties:
@@ -107,3 +112,34 @@ components:
           format: date-time
         errorMessage:
           type: string
+        statusHistory:
+          type: array
+          items:
+            $ref: "#/components/schemas/StatusEntry"
+    StatusEntry:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: string
+        responseTime:
+          type: integer
+          format: int64
+        errorMessage:
+          type: string
+    SystemMetrics:
+      type: object
+      properties:
+        uptime:
+          type: string
+        memoryUsage:
+          type: string
+        diskUsage:
+          type: string
+        cpuUsage:
+          type: string
+        lastUpdated:
+          type: string
+          format: date-time

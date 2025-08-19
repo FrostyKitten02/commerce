@@ -213,13 +213,14 @@ export interface UpdateProductReq {
 }
 
 /**
- * ProductControllerApi - axios parameter creator
+ * ProductCatalogApi - axios parameter creator
  * @export
  */
-export const ProductControllerApiAxiosParamCreator = function (configuration?: Configuration) {
+export const ProductCatalogApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * 
+         * Create a new product with details and optional image upload. Requires admin privileges.
+         * @summary Create new product
          * @param {CreateProductReq} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -261,7 +262,8 @@ export const ProductControllerApiAxiosParamCreator = function (configuration?: C
             };
         },
         /**
-         * 
+         * Permanently delete a product from the catalog. Requires admin privileges.
+         * @summary Delete product
          * @param {string} productId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -298,7 +300,8 @@ export const ProductControllerApiAxiosParamCreator = function (configuration?: C
             };
         },
         /**
-         * 
+         * Retrieve detailed information about a specific product by its unique identifier
+         * @summary Get product by ID
          * @param {string} productId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -335,7 +338,8 @@ export const ProductControllerApiAxiosParamCreator = function (configuration?: C
             };
         },
         /**
-         * 
+         * Retrieve multiple products by providing a list of product IDs as query parameters
+         * @summary Get products by IDs
          * @param {Array<string>} ids 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -375,7 +379,8 @@ export const ProductControllerApiAxiosParamCreator = function (configuration?: C
             };
         },
         /**
-         * 
+         * Completely replace existing product with new data. Requires admin privileges.
+         * @summary Replace product
          * @param {string} productId 
          * @param {CreateProductReq} createProductReq 
          * @param {*} [options] Override http request option.
@@ -418,7 +423,8 @@ export const ProductControllerApiAxiosParamCreator = function (configuration?: C
             };
         },
         /**
-         * 
+         * Retrieve list of all available products in the catalog with pagination support
+         * @summary Search all products
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -451,7 +457,8 @@ export const ProductControllerApiAxiosParamCreator = function (configuration?: C
             };
         },
         /**
-         * 
+         * Update existing product with new data and optional image. Requires admin privileges.
+         * @summary Update product
          * @param {UpdateProductReq} body 
          * @param {string} productId 
          * @param {*} [options] Override http request option.
@@ -500,14 +507,15 @@ export const ProductControllerApiAxiosParamCreator = function (configuration?: C
 };
 
 /**
- * ProductControllerApi - functional programming interface
+ * ProductCatalogApi - functional programming interface
  * @export
  */
-export const ProductControllerApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = ProductControllerApiAxiosParamCreator(configuration)
+export const ProductCatalogApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = ProductCatalogApiAxiosParamCreator(configuration)
     return {
         /**
-         * 
+         * Create a new product with details and optional image upload. Requires admin privileges.
+         * @summary Create new product
          * @param {CreateProductReq} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -515,11 +523,12 @@ export const ProductControllerApiFp = function(configuration?: Configuration) {
         async createProduct(body: CreateProductReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ResourceCreatedRes>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.createProduct(body, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ProductControllerApi.createProduct']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['ProductCatalogApi.createProduct']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
+         * Permanently delete a product from the catalog. Requires admin privileges.
+         * @summary Delete product
          * @param {string} productId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -527,11 +536,12 @@ export const ProductControllerApiFp = function(configuration?: Configuration) {
         async deleteProduct(productId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.deleteProduct(productId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ProductControllerApi.deleteProduct']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['ProductCatalogApi.deleteProduct']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
+         * Retrieve detailed information about a specific product by its unique identifier
+         * @summary Get product by ID
          * @param {string} productId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -539,11 +549,12 @@ export const ProductControllerApiFp = function(configuration?: Configuration) {
         async getProduct(productId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetProductRes>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getProduct(productId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ProductControllerApi.getProduct']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['ProductCatalogApi.getProduct']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
+         * Retrieve multiple products by providing a list of product IDs as query parameters
+         * @summary Get products by IDs
          * @param {Array<string>} ids 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -551,11 +562,12 @@ export const ProductControllerApiFp = function(configuration?: Configuration) {
         async getProducts(ids: Array<string>, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetProductRes>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getProducts(ids, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ProductControllerApi.getProducts']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['ProductCatalogApi.getProducts']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
+         * Completely replace existing product with new data. Requires admin privileges.
+         * @summary Replace product
          * @param {string} productId 
          * @param {CreateProductReq} createProductReq 
          * @param {*} [options] Override http request option.
@@ -564,22 +576,24 @@ export const ProductControllerApiFp = function(configuration?: Configuration) {
         async replaceProduct(productId: string, createProductReq: CreateProductReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.replaceProduct(productId, createProductReq, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ProductControllerApi.replaceProduct']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['ProductCatalogApi.replaceProduct']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
+         * Retrieve list of all available products in the catalog with pagination support
+         * @summary Search all products
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         async searchProducts(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProductListRes>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.searchProducts(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ProductControllerApi.searchProducts']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['ProductCatalogApi.searchProducts']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
+         * Update existing product with new data and optional image. Requires admin privileges.
+         * @summary Update product
          * @param {UpdateProductReq} body 
          * @param {string} productId 
          * @param {*} [options] Override http request option.
@@ -588,21 +602,22 @@ export const ProductControllerApiFp = function(configuration?: Configuration) {
         async updateProduct(body: UpdateProductReq, productId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.updateProduct(body, productId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ProductControllerApi.updateProduct']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['ProductCatalogApi.updateProduct']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
 
 /**
- * ProductControllerApi - factory interface
+ * ProductCatalogApi - factory interface
  * @export
  */
-export const ProductControllerApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = ProductControllerApiFp(configuration)
+export const ProductCatalogApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = ProductCatalogApiFp(configuration)
     return {
         /**
-         * 
+         * Create a new product with details and optional image upload. Requires admin privileges.
+         * @summary Create new product
          * @param {CreateProductReq} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -611,7 +626,8 @@ export const ProductControllerApiFactory = function (configuration?: Configurati
             return localVarFp.createProduct(body, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Permanently delete a product from the catalog. Requires admin privileges.
+         * @summary Delete product
          * @param {string} productId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -620,7 +636,8 @@ export const ProductControllerApiFactory = function (configuration?: Configurati
             return localVarFp.deleteProduct(productId, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Retrieve detailed information about a specific product by its unique identifier
+         * @summary Get product by ID
          * @param {string} productId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -629,7 +646,8 @@ export const ProductControllerApiFactory = function (configuration?: Configurati
             return localVarFp.getProduct(productId, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Retrieve multiple products by providing a list of product IDs as query parameters
+         * @summary Get products by IDs
          * @param {Array<string>} ids 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -638,7 +656,8 @@ export const ProductControllerApiFactory = function (configuration?: Configurati
             return localVarFp.getProducts(ids, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Completely replace existing product with new data. Requires admin privileges.
+         * @summary Replace product
          * @param {string} productId 
          * @param {CreateProductReq} createProductReq 
          * @param {*} [options] Override http request option.
@@ -648,7 +667,8 @@ export const ProductControllerApiFactory = function (configuration?: Configurati
             return localVarFp.replaceProduct(productId, createProductReq, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Retrieve list of all available products in the catalog with pagination support
+         * @summary Search all products
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -656,7 +676,8 @@ export const ProductControllerApiFactory = function (configuration?: Configurati
             return localVarFp.searchProducts(options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Update existing product with new data and optional image. Requires admin privileges.
+         * @summary Update product
          * @param {UpdateProductReq} body 
          * @param {string} productId 
          * @param {*} [options] Override http request option.
@@ -669,160 +690,174 @@ export const ProductControllerApiFactory = function (configuration?: Configurati
 };
 
 /**
- * ProductControllerApi - interface
+ * ProductCatalogApi - interface
  * @export
- * @interface ProductControllerApi
+ * @interface ProductCatalogApi
  */
-export interface ProductControllerApiInterface {
+export interface ProductCatalogApiInterface {
     /**
-     * 
+     * Create a new product with details and optional image upload. Requires admin privileges.
+     * @summary Create new product
      * @param {CreateProductReq} body 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ProductControllerApiInterface
+     * @memberof ProductCatalogApiInterface
      */
     createProduct(body: CreateProductReq, options?: RawAxiosRequestConfig): AxiosPromise<ResourceCreatedRes>;
 
     /**
-     * 
+     * Permanently delete a product from the catalog. Requires admin privileges.
+     * @summary Delete product
      * @param {string} productId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ProductControllerApiInterface
+     * @memberof ProductCatalogApiInterface
      */
     deleteProduct(productId: string, options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
     /**
-     * 
+     * Retrieve detailed information about a specific product by its unique identifier
+     * @summary Get product by ID
      * @param {string} productId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ProductControllerApiInterface
+     * @memberof ProductCatalogApiInterface
      */
     getProduct(productId: string, options?: RawAxiosRequestConfig): AxiosPromise<GetProductRes>;
 
     /**
-     * 
+     * Retrieve multiple products by providing a list of product IDs as query parameters
+     * @summary Get products by IDs
      * @param {Array<string>} ids 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ProductControllerApiInterface
+     * @memberof ProductCatalogApiInterface
      */
     getProducts(ids: Array<string>, options?: RawAxiosRequestConfig): AxiosPromise<GetProductRes>;
 
     /**
-     * 
+     * Completely replace existing product with new data. Requires admin privileges.
+     * @summary Replace product
      * @param {string} productId 
      * @param {CreateProductReq} createProductReq 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ProductControllerApiInterface
+     * @memberof ProductCatalogApiInterface
      */
     replaceProduct(productId: string, createProductReq: CreateProductReq, options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
     /**
-     * 
+     * Retrieve list of all available products in the catalog with pagination support
+     * @summary Search all products
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ProductControllerApiInterface
+     * @memberof ProductCatalogApiInterface
      */
     searchProducts(options?: RawAxiosRequestConfig): AxiosPromise<ProductListRes>;
 
     /**
-     * 
+     * Update existing product with new data and optional image. Requires admin privileges.
+     * @summary Update product
      * @param {UpdateProductReq} body 
      * @param {string} productId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ProductControllerApiInterface
+     * @memberof ProductCatalogApiInterface
      */
     updateProduct(body: UpdateProductReq, productId: string, options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
 }
 
 /**
- * ProductControllerApi - object-oriented interface
+ * ProductCatalogApi - object-oriented interface
  * @export
- * @class ProductControllerApi
+ * @class ProductCatalogApi
  * @extends {BaseAPI}
  */
-export class ProductControllerApi extends BaseAPI implements ProductControllerApiInterface {
+export class ProductCatalogApi extends BaseAPI implements ProductCatalogApiInterface {
     /**
-     * 
+     * Create a new product with details and optional image upload. Requires admin privileges.
+     * @summary Create new product
      * @param {CreateProductReq} body 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ProductControllerApi
+     * @memberof ProductCatalogApi
      */
     public createProduct(body: CreateProductReq, options?: RawAxiosRequestConfig) {
-        return ProductControllerApiFp(this.configuration).createProduct(body, options).then((request) => request(this.axios, this.basePath));
+        return ProductCatalogApiFp(this.configuration).createProduct(body, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * 
+     * Permanently delete a product from the catalog. Requires admin privileges.
+     * @summary Delete product
      * @param {string} productId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ProductControllerApi
+     * @memberof ProductCatalogApi
      */
     public deleteProduct(productId: string, options?: RawAxiosRequestConfig) {
-        return ProductControllerApiFp(this.configuration).deleteProduct(productId, options).then((request) => request(this.axios, this.basePath));
+        return ProductCatalogApiFp(this.configuration).deleteProduct(productId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * 
+     * Retrieve detailed information about a specific product by its unique identifier
+     * @summary Get product by ID
      * @param {string} productId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ProductControllerApi
+     * @memberof ProductCatalogApi
      */
     public getProduct(productId: string, options?: RawAxiosRequestConfig) {
-        return ProductControllerApiFp(this.configuration).getProduct(productId, options).then((request) => request(this.axios, this.basePath));
+        return ProductCatalogApiFp(this.configuration).getProduct(productId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * 
+     * Retrieve multiple products by providing a list of product IDs as query parameters
+     * @summary Get products by IDs
      * @param {Array<string>} ids 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ProductControllerApi
+     * @memberof ProductCatalogApi
      */
     public getProducts(ids: Array<string>, options?: RawAxiosRequestConfig) {
-        return ProductControllerApiFp(this.configuration).getProducts(ids, options).then((request) => request(this.axios, this.basePath));
+        return ProductCatalogApiFp(this.configuration).getProducts(ids, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * 
+     * Completely replace existing product with new data. Requires admin privileges.
+     * @summary Replace product
      * @param {string} productId 
      * @param {CreateProductReq} createProductReq 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ProductControllerApi
+     * @memberof ProductCatalogApi
      */
     public replaceProduct(productId: string, createProductReq: CreateProductReq, options?: RawAxiosRequestConfig) {
-        return ProductControllerApiFp(this.configuration).replaceProduct(productId, createProductReq, options).then((request) => request(this.axios, this.basePath));
+        return ProductCatalogApiFp(this.configuration).replaceProduct(productId, createProductReq, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * 
+     * Retrieve list of all available products in the catalog with pagination support
+     * @summary Search all products
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ProductControllerApi
+     * @memberof ProductCatalogApi
      */
     public searchProducts(options?: RawAxiosRequestConfig) {
-        return ProductControllerApiFp(this.configuration).searchProducts(options).then((request) => request(this.axios, this.basePath));
+        return ProductCatalogApiFp(this.configuration).searchProducts(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * 
+     * Update existing product with new data and optional image. Requires admin privileges.
+     * @summary Update product
      * @param {UpdateProductReq} body 
      * @param {string} productId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ProductControllerApi
+     * @memberof ProductCatalogApi
      */
     public updateProduct(body: UpdateProductReq, productId: string, options?: RawAxiosRequestConfig) {
-        return ProductControllerApiFp(this.configuration).updateProduct(body, productId, options).then((request) => request(this.axios, this.basePath));
+        return ProductCatalogApiFp(this.configuration).updateProduct(body, productId, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

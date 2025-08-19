@@ -14,22 +14,22 @@ cd ..
 
 echo Building auth service...
 cd auth
-call mvn clean package -DskipTests
+call mvn clean install -DskipTests
 cd ..
 
 echo Building catalog service...
 cd catalog  
-call mvn clean package -DskipTests
+call mvn clean install -DskipTests
 cd ..
 
 echo Building cart service...
 cd cart
-call mvn clean package -DskipTests
+call mvn clean install -DskipTests
 cd ..
 
 echo Building checkout service...
 cd checkout
-call mvn clean package -DskipTests
+call mvn clean install -DskipTests
 cd ..
 
 echo Building web-app...

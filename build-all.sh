@@ -5,22 +5,22 @@ echo "Building Java services..."
 
 echo "Building auth service..."
 cd auth
-mvn clean package -DskipTests
+mvn clean install -DskipTests
 cd ..
 
 echo "Building catalog service..."
 cd catalog  
-mvn clean package -DskipTests
+mvn clean install -DskipTests
 cd ..
 
 echo "Building cart service..."
 cd cart
-mvn clean package -DskipTests
+mvn clean install -DskipTests
 cd ..
 
 echo "Building checkout service..."
 cd checkout
-mvn clean package -DskipTests
+mvn clean install -DskipTests
 cd ..
 
 echo "Building auth-common..."
