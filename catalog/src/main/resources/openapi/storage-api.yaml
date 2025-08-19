@@ -1,0 +1,360 @@
+openapi: 3.0.0
+info:
+  title: Storage Service API
+  description: A file storage service for commerce application
+  version: 1.0.0
+  contact:
+    name: API Support
+    email: support@example.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:8003/api
+    description: Local development server
+
+security:
+  - BearerAuth: []
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    FileRecord:
+      type: object
+      required:
+        - id
+        - fileName
+        - originalName
+        - mimeType
+        - size
+        - relativePath
+        - absolutePath
+        - createdAt
+        - updatedAt
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the file
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        fileName:
+          type: string
+          description: Generated filename
+          example: "image.jpg"
+        originalName:
+          type: string
+          description: Original filename from upload
+          example: "my-photo.jpg"
+        mimeType:
+          type: string
+          description: MIME type of the file
+          example: "image/jpeg"
+        size:
+          type: integer
+          format: int64
+          description: File size in bytes
+          example: 1024000
+        relativePath:
+          type: string
+          description: Relative path within storage directory
+          example: "2024/01/15/image.jpg"
+        absolutePath:
+          type: string
+          description: Full filesystem path
+          example: "/uploads/2024/01/15/image.jpg"
+        uploadedBy:
+          type: string
+          format: uuid
+          description: ID of user who uploaded the file
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        createdAt:
+          type: string
+          format: date-time
+          description: When the file was uploaded
+          example: "2024-01-15T14:30:00Z"
+        updatedAt:
+          type: string
+          format: date-time
+          description: When the file record was last updated
+          example: "2024-01-15T14:30:00Z"
+
+    FileUploadResponse:
+      type: object
+      required:
+        - id
+        - fileName
+        - originalName
+        - mimeType
+        - size
+        - url
+        - createdAt
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the uploaded file
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        fileName:
+          type: string
+          description: Generated filename
+          example: "image.jpg"
+        originalName:
+          type: string
+          description: Original filename from upload
+          example: "my-photo.jpg"
+        mimeType:
+          type: string
+          description: MIME type of the file
+          example: "image/jpeg"
+        size:
+          type: integer
+          format: int64
+          description: File size in bytes
+          example: 1024000
+        url:
+          type: string
+          description: URL to access the uploaded file
+          example: "/api/files/123e4567-e89b-12d3-a456-426614174000"
+        createdAt:
+          type: string
+          format: date-time
+          description: When the file was uploaded
+          example: "2024-01-15T14:30:00Z"
+
+    ErrorResponse:
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          type: string
+          description: Error message
+          example: "File not found"
+        message:
+          type: string
+          description: Detailed error description
+          example: "The requested file does not exist"
+        code:
+          type: integer
+          description: HTTP status code
+          example: 404
+
+    HealthStatus:
+      type: object
+      required:
+        - status
+        - service
+      properties:
+        status:
+          type: string
+          description: Service status
+          example: "ok"
+        service:
+          type: string
+          description: Service name
+          example: "storage"
+
+paths:
+  /health:
+    get:
+      summary: Health check
+      description: Check if the storage service is running
+      operationId: healthCheck
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthStatus'
+
+  /files/upload:
+    post:
+      summary: Upload a file
+      description: Upload a file to the storage service. Only accessible by admin users.
+      operationId: uploadFile
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - file
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: File to upload
+      responses:
+        '201':
+          description: File uploaded successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileUploadResponse'
+        '400':
+          description: Bad request - invalid file or missing data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized - invalid or missing JWT token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden - admin role required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '413':
+          description: File too large
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /files/{id}:
+    get:
+      summary: Get file by ID
+      description: Retrieve a file by its UUID. Returns the actual file content. This is a public endpoint.
+      operationId: getFile
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: File ID (UUID)
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: File content
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: Invalid file ID format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: File not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    delete:
+      summary: Delete a file
+      description: Delete a file by its UUID. Only accessible by admin users.
+      operationId: deleteFile
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: File ID (UUID)
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: File deleted successfully
+        '400':
+          description: Invalid file ID format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized - invalid or missing JWT token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden - admin role required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: File not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /files/{id}/info:
+    get:
+      summary: Get file information by ID
+      description: Retrieve file metadata by its UUID without downloading the file content. This is a public endpoint.
+      operationId: getFileInfo
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: File ID (UUID)
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: File information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileRecord'
+        '400':
+          description: Invalid file ID format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: File not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'

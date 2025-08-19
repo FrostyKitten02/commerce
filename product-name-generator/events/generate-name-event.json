@@ -1,0 +1,9 @@
+{
+  "httpMethod": "POST",
+  "path": "/api/generate-name",
+  "headers": {
+    "Content-Type": "application/json"
+  },
+  "body": "{\"keywords\":[\"wireless\",\"bluetooth\"],\"category\":\"electronics\",\"count\":5}",
+  "isBase64Encoded": false
+}

@@ -1,0 +1,144 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+- url: http://localhost:8002/api
+  description: Generated server url
+security:
+- bearerAuth: []
+paths:
+  /carts/{cartId}:
+    post:
+      tags:
+      - cart-controller
+      operationId: addToCart
+      parameters:
+      - name: cartId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddToCartReq"
+        required: true
+      responses:
+        "200":
+          description: OK
+    delete:
+      tags:
+      - cart-controller
+      operationId: removeFromCart
+      parameters:
+      - name: cartId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: OK
+  /carts/product/{cartProductId}/{quantity}:
+    patch:
+      tags:
+      - cart-controller
+      operationId: updateQuantity
+      parameters:
+      - name: cartProductId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: quantity
+        in: path
+        required: true
+        schema:
+          minimum: 0
+          type: number
+      responses:
+        "200":
+          description: OK
+  /carts:
+    get:
+      tags:
+      - cart-controller
+      operationId: getCart
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/GetCartRes"
+    delete:
+      tags:
+      - cart-controller
+      operationId: deleteCart
+      responses:
+        "200":
+          description: OK
+components:
+  schemas:
+    AddToCartReq:
+      required:
+      - productId
+      - quantity
+      type: object
+      properties:
+        productId:
+          type: string
+          format: uuid
+        quantity:
+          minimum: 0
+          type: number
+    CartDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        cartProducts:
+          type: array
+          items:
+            $ref: "#/components/schemas/CartProductDto"
+        total:
+          type: number
+    CartProductDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        productId:
+          type: string
+          format: uuid
+        pictureId:
+          type: string
+          format: uuid
+        name:
+          type: string
+        sku:
+          type: string
+        price:
+          type: number
+        quantity:
+          type: number
+        lineTotal:
+          type: number
+    GetCartRes:
+      type: object
+      properties:
+        cart:
+          $ref: "#/components/schemas/CartDto"
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: bearerAuth
+      scheme: bearer
+      bearerFormat: JWT

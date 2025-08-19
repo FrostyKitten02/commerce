@@ -1,0 +1,109 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+- url: http://localhost:8086/api
+  description: Generated server url
+tags:
+- name: Health Monitor
+  description: Health monitoring endpoints for microservices
+paths:
+  /api/health/status:
+    get:
+      tags:
+      - Health Monitor
+      summary: Get overall health status
+      description: Returns health status report for all monitored microservices
+      operationId: getHealthStatus
+      responses:
+        "200":
+          description: Health report retrieved successfully
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/HealthReport"
+  /api/health/services:
+    get:
+      tags:
+      - Health Monitor
+      summary: Get available services
+      description: Returns list of all services being monitored
+      operationId: getAvailableServices
+      responses:
+        "200":
+          description: Available services retrieved successfully
+          content:
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+  /api/health/service/{serviceName}:
+    get:
+      tags:
+      - Health Monitor
+      summary: Check specific service health
+      description: Returns health status for a specific service
+      operationId: checkSpecificService
+      parameters:
+      - name: serviceName
+        in: path
+        description: Name of the service to check
+        required: true
+        schema:
+          type: string
+        example: auth
+      responses:
+        "200":
+          description: Service health status retrieved successfully
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ServiceStatus"
+        "404":
+          description: Service not found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ServiceStatus"
+components:
+  schemas:
+    HealthReport:
+      type: object
+      properties:
+        overallStatus:
+          type: string
+        totalServices:
+          type: integer
+          format: int32
+        servicesUp:
+          type: integer
+          format: int32
+        servicesDown:
+          type: integer
+          format: int32
+        reportTime:
+          type: string
+          format: date-time
+        services:
+          type: array
+          items:
+            $ref: "#/components/schemas/ServiceStatus"
+    ServiceStatus:
+      type: object
+      properties:
+        serviceName:
+          type: string
+        status:
+          type: string
+        url:
+          type: string
+        responseTime:
+          type: integer
+          format: int64
+        lastChecked:
+          type: string
+          format: date-time
+        errorMessage:
+          type: string

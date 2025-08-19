@@ -1,0 +1,42 @@
+scalar DateTime
+
+type ServiceStatus {
+    serviceName: String!
+    status: String!
+    url: String!
+    responseTime: Int!
+    lastChecked: DateTime!
+    errorMessage: String
+    statusHistory: [StatusEntry!]!
+}
+
+type StatusEntry {
+    timestamp: DateTime!
+    status: String!
+    responseTime: Int!
+    errorMessage: String
+}
+
+type HealthReport {
+    overallStatus: String!
+    reportTime: DateTime!
+    totalServices: Int!
+    servicesUp: Int!
+    servicesDown: Int!
+    services: [ServiceStatus!]!
+    systemMetrics: SystemMetrics
+}
+
+type SystemMetrics {
+    uptime: String!
+    memoryUsage: String!
+    diskUsage: String!
+    cpuUsage: String!
+    lastUpdated: DateTime!
+}
+
+type Query {
+    healthReport: HealthReport!
+    serviceStatus(serviceName: String!): ServiceStatus
+    systemMetrics: SystemMetrics!
+}

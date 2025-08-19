@@ -1,0 +1,225 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+- url: http://localhost:8001/api
+  description: Generated server url
+security:
+- bearerAuth: []
+paths:
+  /products/{productId}:
+    get:
+      tags:
+      - product-controller
+      operationId: getProduct
+      parameters:
+      - name: productId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/GetProductRes"
+    put:
+      tags:
+      - product-controller
+      operationId: replaceProduct
+      parameters:
+      - name: productId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateProductReq"
+        required: true
+      responses:
+        "200":
+          description: OK
+    delete:
+      tags:
+      - product-controller
+      operationId: deleteProduct
+      parameters:
+      - name: productId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: OK
+    patch:
+      tags:
+      - product-controller
+      operationId: updateProduct
+      parameters:
+      - name: body
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/UpdateProductReq"
+      - name: productId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: OK
+  /products:
+    get:
+      tags:
+      - product-controller
+      operationId: getProducts
+      parameters:
+      - name: ids
+        in: query
+        required: true
+        schema:
+          type: array
+          items:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/GetProductRes"
+    post:
+      tags:
+      - product-controller
+      operationId: createProduct
+      parameters:
+      - name: body
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/CreateProductReq"
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ResourceCreatedRes"
+  /products/list:
+    get:
+      tags:
+      - product-controller
+      operationId: searchProducts
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProductListRes"
+components:
+  schemas:
+    CreateProductDto:
+      required:
+      - name
+      type: object
+      properties:
+        sku:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+    CreateProductReq:
+      required:
+      - product
+      type: object
+      properties:
+        product:
+          $ref: "#/components/schemas/CreateProductDto"
+        file:
+          type: string
+          format: binary
+    ResourceCreatedRes:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+    UpdateProductDto:
+      required:
+      - name
+      type: object
+      properties:
+        sku:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+    UpdateProductReq:
+      required:
+      - product
+      type: object
+      properties:
+        product:
+          $ref: "#/components/schemas/UpdateProductDto"
+        file:
+          type: string
+          format: binary
+    GetProductRes:
+      type: object
+      properties:
+        product:
+          $ref: "#/components/schemas/ProductDto"
+        products:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProductDto"
+    ProductDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        sku:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+        pictureId:
+          type: string
+          format: uuid
+    ProductListRes:
+      type: object
+      properties:
+        products:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProductDto"
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: bearerAuth
+      scheme: bearer
+      bearerFormat: JWT

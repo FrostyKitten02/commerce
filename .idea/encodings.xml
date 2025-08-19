@@ -1,7 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/auth-common/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/auth/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/cart/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/cart/target/generated-sources/openapi/catalog/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/catalog/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/catalog/target/generated-sources/openapi/storage/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/checkout/checkout/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/checkout/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/checkout/target/generated-sources/openapi/cart/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/checkout/target/generated-sources/openapi/catalog/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/exception-handling/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/health-monitor/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/product-name-generator/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
   </component>
 </project>

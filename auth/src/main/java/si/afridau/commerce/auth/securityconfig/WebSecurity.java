@@ -7,21 +7,17 @@ import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.ProviderManager;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import si.afridau.commerce.auth.filter.JWTAuthenticationFilter;
 
 import java.util.List;
 
@@ -47,6 +43,8 @@ public class WebSecurity {
                             .requestMatchers("/docs/**").permitAll()
                             .requestMatchers("/docs").permitAll()
                             .requestMatchers("/docs.yaml").permitAll()
+                            .requestMatchers("/actuator/health").permitAll()
+                            .requestMatchers("/actuator/info").permitAll()
                             .anyRequest().authenticated();
                 })
                 .authenticationManager(authenticationManager)
@@ -71,24 +69,6 @@ public class WebSecurity {
                                 .bearerFormat("JWT")));
     }
 
-    @Bean
-    public AuthenticationManager authenticationManager(
-            UserDetailsService userDetailsService,
-            PasswordEncoder passwordEncoder) {
-        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-        authenticationProvider.setUserDetailsService(userDetailsService);
-        authenticationProvider.setPasswordEncoder(passwordEncoder);
-
-        ProviderManager providerManager = new ProviderManager(authenticationProvider);
-        providerManager.setEraseCredentialsAfterAuthentication(false);
-
-        return new ProviderManager(authenticationProvider);
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-    }
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();

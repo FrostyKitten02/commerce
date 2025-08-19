@@ -1,0 +1,46 @@
+scalar DateTime
+
+type GenerationRequest {
+    category: String!
+    keywords: [String!]!
+    count: Int!
+    requestTime: DateTime!
+}
+
+type NameSuggestion {
+    name: String!
+    category: String!
+    confidence: Float!
+    keywords: [String!]!
+    generatedAt: DateTime!
+    pattern: String!
+}
+
+type GenerationResponse {
+    suggestions: [NameSuggestion!]!
+    totalGenerated: Int!
+    processingTime: Int!
+    category: String!
+    originalRequest: GenerationRequest!
+}
+
+type GenerationStatistics {
+    totalRequests: Int!
+    requestsByCategory: [CategoryStats!]!
+    averageProcessingTime: Float!
+    mostPopularKeywords: [String!]!
+    lastUpdated: DateTime!
+}
+
+type CategoryStats {
+    category: String!
+    count: Int!
+    averageProcessingTime: Float!
+    popularKeywords: [String!]!
+}
+
+type Query {
+    generateNames(category: String!, keywords: [String!], count: Int): GenerationResponse!
+    getStatistics: GenerationStatistics!
+    getSupportedCategories: [String!]!
+}

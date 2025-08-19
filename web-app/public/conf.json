@@ -1,0 +1,11 @@
+{
+  "baseUrl" : {
+    "auth" : "http://localhost:8000/api",
+    "catalog" : "http://localhost:8001/api",
+    "cart" : "http://localhost:8002/api",
+    "storage" : "http://localhost:8003/api",
+    "checkout" : "http://localhost:8004/api"
+  },
+  "healthMonitorUrl" : "http://localhost:8086/api",
+  "productNameGeneratorUrl" : "http://localhost:8087/api"
+}

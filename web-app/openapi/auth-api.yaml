@@ -1,0 +1,74 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+- url: http://localhost:8000/api
+  description: Generated server url
+security:
+- bearerAuth: []
+paths:
+  /auth/register:
+    post:
+      tags:
+      - auth-controller
+      operationId: register
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+  /auth/login:
+    post:
+      tags:
+      - auth-controller
+      operationId: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/LoginResponse"
+components:
+  schemas:
+    RegisterRequest:
+      type: object
+      properties:
+        firstname:
+          type: string
+        lastname:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        passwordRepeated:
+          type: string
+    LoginRequest:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+    LoginResponse:
+      type: object
+      properties:
+        token:
+          type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

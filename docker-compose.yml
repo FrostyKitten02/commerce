@@ -1,0 +1,274 @@
+version: '3.8'
+
+services:
+  # Auth Service PostgreSQL
+  auth-postgres:
+    image: postgres:15-alpine
+    container_name: commerce-auth-postgres
+    environment:
+      POSTGRES_DB: auth_ws
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+    ports:
+      - "5430:5432"
+    volumes:
+      - auth_postgres_data:/var/lib/postgresql/data
+    networks:
+      - commerce-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Catalog Service PostgreSQL
+  catalog-postgres:
+    image: postgres:15-alpine
+    container_name: commerce-catalog-postgres
+    environment:
+      POSTGRES_DB: catalog_ws
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+    ports:
+      - "5431:5432"
+    volumes:
+      - catalog_postgres_data:/var/lib/postgresql/data
+    networks:
+      - commerce-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Cart Service PostgreSQL
+  cart-postgres:
+    image: postgres:15-alpine
+    container_name: commerce-cart-postgres
+    environment:
+      POSTGRES_DB: cart_ws
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+    ports:
+      - "5433:5432"
+    volumes:
+      - cart_postgres_data:/var/lib/postgresql/data
+    networks:
+      - commerce-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Checkout Service PostgreSQL
+  checkout-postgres:
+    image: postgres:15-alpine
+    container_name: commerce-checkout-postgres
+    environment:
+      POSTGRES_DB: checkout_ws
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+    ports:
+      - "5434:5432"
+    volumes:
+      - checkout_postgres_data:/var/lib/postgresql/data
+    networks:
+      - commerce-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Storage Service PostgreSQL
+  storage-postgres:
+    image: postgres:15-alpine
+    container_name: commerce-storage-postgres
+    environment:
+      POSTGRES_DB: storage_ws
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+    ports:
+      - "5435:5432"
+    volumes:
+      - storage_postgres_data:/var/lib/postgresql/data
+    networks:
+      - commerce-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Auth Service
+  auth-service:
+    build:
+      context: ./auth
+      dockerfile: Dockerfile
+    container_name: commerce-auth
+    ports:
+      - "8000:8000"
+    # Optional: Mount external config file to override default settings
+    # volumes:
+    #   - ./config/auth-external.properties:/app/config/application.properties:ro
+    depends_on:
+      auth-postgres:
+        condition: service_healthy
+    networks:
+      - commerce-network
+    restart: unless-stopped
+
+  # Catalog Service  
+  catalog-service:
+    build:
+      context: ./catalog
+      dockerfile: Dockerfile
+    container_name: commerce-catalog
+    ports:
+      - "8001:8001"
+    # Optional: Mount external config file to override default settings
+    # volumes:
+    #   - ./config/catalog-external.properties:/app/config/application.properties:ro
+    depends_on:
+      catalog-postgres:
+        condition: service_healthy
+      storage-service:
+        condition: service_started
+    networks:
+      - commerce-network
+    restart: unless-stopped
+
+  # Cart Service
+  cart-service:
+    build:
+      context: ./cart
+      dockerfile: Dockerfile
+    container_name: commerce-cart
+    ports:
+      - "8002:8002"
+    # Optional: Mount external config file to override default settings
+    # volumes:
+    #   - ./config/cart-external.properties:/app/config/application.properties:ro
+    depends_on:
+      cart-postgres:
+        condition: service_healthy
+      catalog-service:
+        condition: service_started
+    networks:
+      - commerce-network
+    restart: unless-stopped
+
+  # Checkout Service
+  checkout-service:
+    build:
+      context: ./checkout
+      dockerfile: Dockerfile
+    container_name: commerce-checkout
+    ports:
+      - "8004:8004"
+    # Optional: Mount external config file to override default settings
+    # volumes:
+    #   - ./config/checkout-external.properties:/app/config/application.properties:ro
+    depends_on:
+      checkout-postgres:
+        condition: service_healthy
+      cart-service:
+        condition: service_started
+      catalog-service:
+        condition: service_started
+    networks:
+      - commerce-network
+    restart: unless-stopped
+
+  # Storage Service (Go)
+  storage-service:
+    build:
+      context: ./storage
+      dockerfile: Dockerfile
+    container_name: commerce-storage
+    environment:
+      GIN_MODE: release
+      PORT: 8003
+      DB_HOST: storage-postgres
+      DB_PORT: 5432
+      DB_NAME: storage_ws
+      DB_USER: postgres
+      DB_PASSWORD: admin
+      JWT_SECRET: 6Cfx1grNGGekPmQfCw93bm6JyDCvEd6BDuieHEUCDbqxHV0iYid7YtQjnzryhKB3Hy6Mi137h3AuqqeE1dyvwxg48Fmw5rSErHbhEWGUZMq9nMduh3ykXUPK9EAFMSu6
+    ports:
+      - "8003:8003"
+    depends_on:
+      storage-postgres:
+        condition: service_healthy
+    volumes:
+      - storage_uploads:/root/uploads
+    networks:
+      - commerce-network
+    restart: unless-stopped
+
+  # Health Monitor Service
+  health-monitor-service:
+    build:
+      context: ./health-monitor
+      dockerfile: Dockerfile
+    container_name: commerce-health-monitor
+    ports:
+      - "8086:8086"
+    depends_on:
+      - auth-service
+      - catalog-service
+      - cart-service
+      - checkout-service
+      - storage-service
+    networks:
+      - commerce-network
+    restart: unless-stopped
+
+  # Product Name Generator Service
+  product-name-generator-service:
+    build:
+      context: ./product-name-generator
+      dockerfile: Dockerfile
+    container_name: commerce-product-name-generator
+    ports:
+      - "8087:8087"
+    networks:
+      - commerce-network
+    restart: unless-stopped
+
+  # Web Application (React)
+  web-app:
+    build:
+      context: ./web-app
+      dockerfile: Dockerfile
+    container_name: commerce-web
+    ports:
+      - "80:80"
+    depends_on:
+      - auth-service
+      - catalog-service
+      - cart-service
+      - checkout-service
+      - storage-service
+    networks:
+      - commerce-network
+    restart: unless-stopped
+
+networks:
+  commerce-network:
+    driver: bridge
+
+volumes:
+  auth_postgres_data:
+    driver: local
+  catalog_postgres_data:
+    driver: local
+  cart_postgres_data:
+    driver: local
+  checkout_postgres_data:
+    driver: local
+  storage_postgres_data:
+    driver: local
+  storage_uploads:
+    driver: local
