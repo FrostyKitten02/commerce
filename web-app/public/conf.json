@@ -5,7 +5,7 @@
     "cart" : "http://localhost:8002/api",
     "storage" : "http://localhost:8003/api",
     "checkout" : "http://localhost:8004/api",
-    "healthMonitorUrl" : "http://localhost:8086/api",
-    "productNameGeneratorUrl" : "http://localhost:8087/api"
+    "healthCheck" : "http://localhost:8086/api",
+    "productNameGenerator" : "http://localhost:8087/api"
   }
 }
