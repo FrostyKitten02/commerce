@@ -39,6 +39,8 @@ public class WebSecurity {
                     authorizeRequests
                             .requestMatchers("/auth/login").permitAll()
                             .requestMatchers("/auth/register").permitAll()
+                            .requestMatchers("/api/auth/login").permitAll()
+                            .requestMatchers("/api/auth/register").permitAll()
                             .requestMatchers("/swagger-ui/**").permitAll()
                             .requestMatchers("/docs/**").permitAll()
                             .requestMatchers("/docs").permitAll()
