@@ -46,7 +46,8 @@ export default function RegisterPage() {
                 firstname: firstName,
                 lastname: lastName,
                 email: email,
-                password: password
+                password: password,
+                passwordRepeated: password
             });
 
             // Registration successful, redirect to login
