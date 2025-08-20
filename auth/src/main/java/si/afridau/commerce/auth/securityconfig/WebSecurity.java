@@ -39,6 +39,8 @@ public class WebSecurity {
                     authorizeRequests
                             .requestMatchers("/auth/login").permitAll()
                             .requestMatchers("/auth/register").permitAll()
+                            .requestMatchers("/api/auth/login").permitAll()
+                            .requestMatchers("/api/auth/register").permitAll()
                             .requestMatchers("/swagger-ui/**").permitAll()
                             .requestMatchers("/docs/**").permitAll()
                             .requestMatchers("/docs").permitAll()
@@ -72,9 +74,10 @@ public class WebSecurity {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.applyPermitDefaultValues();
-        configuration.setAllowedOrigins(List.of("*"));
+        configuration.setAllowedOriginPatterns(List.of("*"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"));
+        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**",configuration);
         return source;

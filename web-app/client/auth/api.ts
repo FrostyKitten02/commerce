@@ -94,13 +94,14 @@ export interface RegisterRequest {
 }
 
 /**
- * AuthControllerApi - axios parameter creator
+ * AuthenticationApi - axios parameter creator
  * @export
  */
-export const AuthControllerApiAxiosParamCreator = function (configuration?: Configuration) {
+export const AuthenticationApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * 
+         * Authenticate user with email and password, returns JWT token for accessing protected endpoints
+         * @summary User login
          * @param {LoginRequest} loginRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -139,7 +140,8 @@ export const AuthControllerApiAxiosParamCreator = function (configuration?: Conf
             };
         },
         /**
-         * 
+         * Register a new user account with email, password, first name, and last name. Assigns default user role.
+         * @summary User registration
          * @param {RegisterRequest} registerRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -181,14 +183,15 @@ export const AuthControllerApiAxiosParamCreator = function (configuration?: Conf
 };
 
 /**
- * AuthControllerApi - functional programming interface
+ * AuthenticationApi - functional programming interface
  * @export
  */
-export const AuthControllerApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = AuthControllerApiAxiosParamCreator(configuration)
+export const AuthenticationApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = AuthenticationApiAxiosParamCreator(configuration)
     return {
         /**
-         * 
+         * Authenticate user with email and password, returns JWT token for accessing protected endpoints
+         * @summary User login
          * @param {LoginRequest} loginRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -196,11 +199,12 @@ export const AuthControllerApiFp = function(configuration?: Configuration) {
         async login(loginRequest: LoginRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<LoginResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.login(loginRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['AuthControllerApi.login']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['AuthenticationApi.login']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
+         * Register a new user account with email, password, first name, and last name. Assigns default user role.
+         * @summary User registration
          * @param {RegisterRequest} registerRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -208,21 +212,22 @@ export const AuthControllerApiFp = function(configuration?: Configuration) {
         async register(registerRequest: RegisterRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.register(registerRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['AuthControllerApi.register']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['AuthenticationApi.register']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
 
 /**
- * AuthControllerApi - factory interface
+ * AuthenticationApi - factory interface
  * @export
  */
-export const AuthControllerApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = AuthControllerApiFp(configuration)
+export const AuthenticationApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = AuthenticationApiFp(configuration)
     return {
         /**
-         * 
+         * Authenticate user with email and password, returns JWT token for accessing protected endpoints
+         * @summary User login
          * @param {LoginRequest} loginRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -231,7 +236,8 @@ export const AuthControllerApiFactory = function (configuration?: Configuration,
             return localVarFp.login(loginRequest, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Register a new user account with email, password, first name, and last name. Assigns default user role.
+         * @summary User registration
          * @param {RegisterRequest} registerRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -243,58 +249,62 @@ export const AuthControllerApiFactory = function (configuration?: Configuration,
 };
 
 /**
- * AuthControllerApi - interface
+ * AuthenticationApi - interface
  * @export
- * @interface AuthControllerApi
+ * @interface AuthenticationApi
  */
-export interface AuthControllerApiInterface {
+export interface AuthenticationApiInterface {
     /**
-     * 
+     * Authenticate user with email and password, returns JWT token for accessing protected endpoints
+     * @summary User login
      * @param {LoginRequest} loginRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AuthControllerApiInterface
+     * @memberof AuthenticationApiInterface
      */
     login(loginRequest: LoginRequest, options?: RawAxiosRequestConfig): AxiosPromise<LoginResponse>;
 
     /**
-     * 
+     * Register a new user account with email, password, first name, and last name. Assigns default user role.
+     * @summary User registration
      * @param {RegisterRequest} registerRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AuthControllerApiInterface
+     * @memberof AuthenticationApiInterface
      */
     register(registerRequest: RegisterRequest, options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
 }
 
 /**
- * AuthControllerApi - object-oriented interface
+ * AuthenticationApi - object-oriented interface
  * @export
- * @class AuthControllerApi
+ * @class AuthenticationApi
  * @extends {BaseAPI}
  */
-export class AuthControllerApi extends BaseAPI implements AuthControllerApiInterface {
+export class AuthenticationApi extends BaseAPI implements AuthenticationApiInterface {
     /**
-     * 
+     * Authenticate user with email and password, returns JWT token for accessing protected endpoints
+     * @summary User login
      * @param {LoginRequest} loginRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AuthControllerApi
+     * @memberof AuthenticationApi
      */
     public login(loginRequest: LoginRequest, options?: RawAxiosRequestConfig) {
-        return AuthControllerApiFp(this.configuration).login(loginRequest, options).then((request) => request(this.axios, this.basePath));
+        return AuthenticationApiFp(this.configuration).login(loginRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * 
+     * Register a new user account with email, password, first name, and last name. Assigns default user role.
+     * @summary User registration
      * @param {RegisterRequest} registerRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AuthControllerApi
+     * @memberof AuthenticationApi
      */
     public register(registerRequest: RegisterRequest, options?: RawAxiosRequestConfig) {
-        return AuthControllerApiFp(this.configuration).register(registerRequest, options).then((request) => request(this.axios, this.basePath));
+        return AuthenticationApiFp(this.configuration).register(registerRequest, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

@@ -7,11 +7,17 @@ servers:
   description: Generated server url
 security:
 - bearerAuth: []
+tags:
+- name: Authentication
+  description: User authentication and registration endpoints
 paths:
   /auth/register:
     post:
       tags:
-      - auth-controller
+      - Authentication
+      summary: User registration
+      description: "Register a new user account with email, password, first name,\
+        \ and last name. Assigns default user role."
       operationId: register
       requestBody:
         content:
@@ -21,11 +27,18 @@ paths:
         required: true
       responses:
         "200":
-          description: OK
+          description: User registered successfully
+        "400":
+          description: Invalid input data or user already exists
+        "500":
+          description: Server configuration error
   /auth/login:
     post:
       tags:
-      - auth-controller
+      - Authentication
+      summary: User login
+      description: "Authenticate user with email and password, returns JWT token for\
+        \ accessing protected endpoints"
       operationId: login
       requestBody:
         content:
@@ -35,7 +48,19 @@ paths:
         required: true
       responses:
         "200":
-          description: OK
+          description: "Login successful, JWT token returned"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/LoginResponse"
+        "400":
+          description: Invalid request format
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/LoginResponse"
+        "401":
+          description: Invalid credentials
           content:
             '*/*':
               schema:

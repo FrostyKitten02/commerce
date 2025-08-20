@@ -10,6 +10,7 @@ import ProductsPage from "./pages/ProductsPage";
 import CartPage from "./pages/CartPage";
 import CheckoutPage from "./pages/CheckoutPage";
 import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
 import AdminLoginPage from "./pages/AdminLoginPage";
 import AdminProductsPage from "./pages/AdminProductsPage";
 import AdminHealthPage from "./pages/AdminHealthPage";
@@ -52,6 +53,10 @@ function App() {
                     {
                         path: "log-in",
                         element: <LoginPage />
+                    },
+                    {
+                        path: "register",
+                        element: <RegisterPage />
                     }
                 ]
             },

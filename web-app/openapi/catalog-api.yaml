@@ -7,11 +7,17 @@ servers:
   description: Generated server url
 security:
 - bearerAuth: []
+tags:
+- name: Product Catalog
+  description: Product management endpoints for catalog service
 paths:
   /products/{productId}:
     get:
       tags:
-      - product-controller
+      - Product Catalog
+      summary: Get product by ID
+      description: Retrieve detailed information about a specific product by its unique
+        identifier
       operationId: getProduct
       parameters:
       - name: productId
@@ -21,15 +27,24 @@ paths:
           type: string
           format: uuid
       responses:
+        "404":
+          description: Product not found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/GetProductRes"
         "200":
-          description: OK
+          description: Product found and returned
           content:
             '*/*':
               schema:
                 $ref: "#/components/schemas/GetProductRes"
     put:
       tags:
-      - product-controller
+      - Product Catalog
+      summary: Replace product
+      description: Completely replace existing product with new data. Requires admin
+        privileges.
       operationId: replaceProduct
       parameters:
       - name: productId
@@ -46,10 +61,18 @@ paths:
         required: true
       responses:
         "200":
-          description: OK
+          description: Product replaced successfully
+        "404":
+          description: Product not found
+        "403":
+          description: Access denied - admin role required
+      security:
+      - Bearer Authentication: []
     delete:
       tags:
-      - product-controller
+      - Product Catalog
+      summary: Delete product
+      description: Permanently delete a product from the catalog. Requires admin privileges.
       operationId: deleteProduct
       parameters:
       - name: productId
@@ -59,11 +82,20 @@ paths:
           type: string
           format: uuid
       responses:
+        "404":
+          description: Product not found
+        "403":
+          description: Access denied - admin role required
         "200":
-          description: OK
+          description: Product deleted successfully
+      security:
+      - Bearer Authentication: []
     patch:
       tags:
-      - product-controller
+      - Product Catalog
+      summary: Update product
+      description: Update existing product with new data and optional image. Requires
+        admin privileges.
       operationId: updateProduct
       parameters:
       - name: body
@@ -79,11 +111,20 @@ paths:
           format: uuid
       responses:
         "200":
-          description: OK
+          description: Product updated successfully
+        "404":
+          description: Product not found
+        "403":
+          description: Access denied - admin role required
+      security:
+      - Bearer Authentication: []
   /products:
     get:
       tags:
-      - product-controller
+      - Product Catalog
+      summary: Get products by IDs
+      description: Retrieve multiple products by providing a list of product IDs as
+        query parameters
       operationId: getProducts
       parameters:
       - name: ids
@@ -96,14 +137,17 @@ paths:
             format: uuid
       responses:
         "200":
-          description: OK
+          description: Products found and returned
           content:
             '*/*':
               schema:
                 $ref: "#/components/schemas/GetProductRes"
     post:
       tags:
-      - product-controller
+      - Product Catalog
+      summary: Create new product
+      description: Create a new product with details and optional image upload. Requires
+        admin privileges.
       operationId: createProduct
       parameters:
       - name: body
@@ -112,20 +156,37 @@ paths:
         schema:
           $ref: "#/components/schemas/CreateProductReq"
       responses:
-        "200":
-          description: OK
+        "201":
+          description: Product created successfully
           content:
             '*/*':
               schema:
                 $ref: "#/components/schemas/ResourceCreatedRes"
+        "400":
+          description: Invalid product data
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ResourceCreatedRes"
+        "403":
+          description: Access denied - admin role required
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ResourceCreatedRes"
+      security:
+      - Bearer Authentication: []
   /products/list:
     get:
       tags:
-      - product-controller
+      - Product Catalog
+      summary: Search all products
+      description: Retrieve list of all available products in the catalog with pagination
+        support
       operationId: searchProducts
       responses:
         "200":
-          description: OK
+          description: Product list retrieved successfully
           content:
             '*/*':
               schema:

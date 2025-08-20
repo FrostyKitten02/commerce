@@ -3,26 +3,6 @@
 # Build all Java services
 echo "Building Java services..."
 
-echo "Building auth service..."
-cd auth
-mvn clean package -DskipTests
-cd ..
-
-echo "Building catalog service..."
-cd catalog  
-mvn clean package -DskipTests
-cd ..
-
-echo "Building cart service..."
-cd cart
-mvn clean package -DskipTests
-cd ..
-
-echo "Building checkout service..."
-cd checkout
-mvn clean package -DskipTests
-cd ..
-
 echo "Building auth-common..."
 cd auth-common
 mvn clean install -DskipTests
@@ -31,6 +11,41 @@ cd ..
 echo "Building exception-handling..."
 cd exception-handling
 mvn clean install -DskipTests
+cd ..
+
+echo "Building auth service..."
+cd auth
+mvn clean install -DskipTests
+cd ..
+
+echo "Building catalog service..."
+cd catalog  
+mvn clean install -DskipTests
+cd ..
+
+echo "Building cart service..."
+cd cart
+mvn clean install -DskipTests
+cd ..
+
+echo "Building checkout service..."
+cd checkout
+mvn clean install -DskipTests
+cd ..
+
+echo "Building health-monitor service..."
+cd health-monitor
+mvn clean install -DskipTests
+cd ..
+
+echo "Building product-name-generator service..."
+cd product-name-generator
+mvn clean install -DskipTests
+cd ..
+
+echo "Building storage service..."
+cd storage
+go build -o storage .
 cd ..
 
 echo "Building web-app..."

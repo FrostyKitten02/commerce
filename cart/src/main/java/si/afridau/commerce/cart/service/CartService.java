@@ -49,6 +49,10 @@ public class CartService {
         }
         CartDto cartDto = cartMapper.toDto(cart);
 
+        if (cartDto.getCartProducts() == null) {
+            return cartDto;
+        }
+
         BigDecimal total = BigDecimal.ZERO;
         GetProductRes res = catalogClientService.getProducts(cartDto.getCartProducts().stream().map(CartProductDto::getProductId).toList());
         if (res == null) {

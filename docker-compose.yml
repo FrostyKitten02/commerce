@@ -109,6 +109,8 @@ services:
     container_name: commerce-auth
     ports:
       - "8000:8000"
+    expose:
+      - "8000"
     # Optional: Mount external config file to override default settings
     # volumes:
     #   - ./config/auth-external.properties:/app/config/application.properties:ro
@@ -127,6 +129,8 @@ services:
     container_name: commerce-catalog
     ports:
       - "8001:8001"
+    expose:
+      - "8001"
     # Optional: Mount external config file to override default settings
     # volumes:
     #   - ./config/catalog-external.properties:/app/config/application.properties:ro
@@ -147,6 +151,8 @@ services:
     container_name: commerce-cart
     ports:
       - "8002:8002"
+    expose:
+      - "8002"
     # Optional: Mount external config file to override default settings
     # volumes:
     #   - ./config/cart-external.properties:/app/config/application.properties:ro
@@ -167,6 +173,8 @@ services:
     container_name: commerce-checkout
     ports:
       - "8004:8004"
+    expose:
+      - "8004"
     # Optional: Mount external config file to override default settings
     # volumes:
     #   - ./config/checkout-external.properties:/app/config/application.properties:ro
@@ -198,6 +206,8 @@ services:
       JWT_SECRET: 6Cfx1grNGGekPmQfCw93bm6JyDCvEd6BDuieHEUCDbqxHV0iYid7YtQjnzryhKB3Hy6Mi137h3AuqqeE1dyvwxg48Fmw5rSErHbhEWGUZMq9nMduh3ykXUPK9EAFMSu6
     ports:
       - "8003:8003"
+    expose:
+      - "8003"
     depends_on:
       storage-postgres:
         condition: service_healthy
@@ -215,6 +225,8 @@ services:
     container_name: commerce-health-monitor
     ports:
       - "8086:8086"
+    expose:
+      - "8086"
     depends_on:
       - auth-service
       - catalog-service
@@ -233,6 +245,8 @@ services:
     container_name: commerce-product-name-generator
     ports:
       - "8087:8087"
+    expose:
+      - "8087"
     networks:
       - commerce-network
     restart: unless-stopped
@@ -245,6 +259,8 @@ services:
     container_name: commerce-web
     ports:
       - "80:80"
+    volumes:
+      - ./web-app/public/conf.json:/usr/share/nginx/html/conf.json:ro
     depends_on:
       - auth-service
       - catalog-service

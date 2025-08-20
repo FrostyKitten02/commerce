@@ -14,7 +14,9 @@ paths:
       tags:
       - Product Name Generator
       summary: Generate product names
-      description: Generate creative product names based on keywords and category
+      description: "Generate creative product names using advanced algorithms based\
+        \ on provided keywords, category, and desired count. Returns suggestions with\
+        \ category-specific prefixes and suffixes."
       operationId: generateProductName
       requestBody:
         description: "Request containing keywords, category, and count"
@@ -41,7 +43,8 @@ paths:
       tags:
       - Product Name Generator
       summary: Health check
-      description: Simple health check endpoint
+      description: Returns service health status to verify that the product name generator
+        service is running and accessible
       operationId: health
       responses:
         "200":
@@ -55,7 +58,8 @@ paths:
       tags:
       - Product Name Generator
       summary: Generate product names (simple)
-      description: Generate product names using query parameters for easy testing
+      description: Generate creative product names using simple query parameters instead
+        of JSON body. Ideal for quick testing and integration with GET-based systems.
       operationId: generateSimpleProductName
       parameters:
       - name: keywords
@@ -99,7 +103,9 @@ paths:
       tags:
       - Product Name Generator
       summary: Get available categories
-      description: Returns list of supported product categories
+      description: "Returns complete list of supported product categories that can\
+        \ be used for name generation (electronics, clothing, food, books, sports,\
+        \ home)"
       operationId: getAvailableCategories
       responses:
         "200":
@@ -124,6 +130,9 @@ components:
         count:
           type: integer
           format: int32
+        requestTime:
+          type: string
+          format: date-time
     GenerateNameResponse:
       type: object
       properties:

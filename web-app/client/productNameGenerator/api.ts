@@ -47,6 +47,12 @@ export interface GenerateNameRequest {
      * @memberof GenerateNameRequest
      */
     'count'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof GenerateNameRequest
+     */
+    'requestTime'?: string;
 }
 /**
  * 
@@ -81,7 +87,7 @@ export interface GenerateNameResponse {
 export const ProductNameGeneratorApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Generate creative product names based on keywords and category
+         * Generate creative product names using advanced algorithms based on provided keywords, category, and desired count. Returns suggestions with category-specific prefixes and suffixes.
          * @summary Generate product names
          * @param {GenerateNameRequest} generateNameRequest Request containing keywords, category, and count
          * @param {*} [options] Override http request option.
@@ -117,7 +123,7 @@ export const ProductNameGeneratorApiAxiosParamCreator = function (configuration?
             };
         },
         /**
-         * Generate product names using query parameters for easy testing
+         * Generate creative product names using simple query parameters instead of JSON body. Ideal for quick testing and integration with GET-based systems.
          * @summary Generate product names (simple)
          * @param {string} [keywords] Comma-separated keywords
          * @param {string} [category] Product category
@@ -162,7 +168,7 @@ export const ProductNameGeneratorApiAxiosParamCreator = function (configuration?
             };
         },
         /**
-         * Returns list of supported product categories
+         * Returns complete list of supported product categories that can be used for name generation (electronics, clothing, food, books, sports, home)
          * @summary Get available categories
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -192,7 +198,7 @@ export const ProductNameGeneratorApiAxiosParamCreator = function (configuration?
             };
         },
         /**
-         * Simple health check endpoint
+         * Returns service health status to verify that the product name generator service is running and accessible
          * @summary Health check
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -232,7 +238,7 @@ export const ProductNameGeneratorApiFp = function(configuration?: Configuration)
     const localVarAxiosParamCreator = ProductNameGeneratorApiAxiosParamCreator(configuration)
     return {
         /**
-         * Generate creative product names based on keywords and category
+         * Generate creative product names using advanced algorithms based on provided keywords, category, and desired count. Returns suggestions with category-specific prefixes and suffixes.
          * @summary Generate product names
          * @param {GenerateNameRequest} generateNameRequest Request containing keywords, category, and count
          * @param {*} [options] Override http request option.
@@ -245,7 +251,7 @@ export const ProductNameGeneratorApiFp = function(configuration?: Configuration)
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Generate product names using query parameters for easy testing
+         * Generate creative product names using simple query parameters instead of JSON body. Ideal for quick testing and integration with GET-based systems.
          * @summary Generate product names (simple)
          * @param {string} [keywords] Comma-separated keywords
          * @param {string} [category] Product category
@@ -260,7 +266,7 @@ export const ProductNameGeneratorApiFp = function(configuration?: Configuration)
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Returns list of supported product categories
+         * Returns complete list of supported product categories that can be used for name generation (electronics, clothing, food, books, sports, home)
          * @summary Get available categories
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -272,7 +278,7 @@ export const ProductNameGeneratorApiFp = function(configuration?: Configuration)
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Simple health check endpoint
+         * Returns service health status to verify that the product name generator service is running and accessible
          * @summary Health check
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -294,7 +300,7 @@ export const ProductNameGeneratorApiFactory = function (configuration?: Configur
     const localVarFp = ProductNameGeneratorApiFp(configuration)
     return {
         /**
-         * Generate creative product names based on keywords and category
+         * Generate creative product names using advanced algorithms based on provided keywords, category, and desired count. Returns suggestions with category-specific prefixes and suffixes.
          * @summary Generate product names
          * @param {GenerateNameRequest} generateNameRequest Request containing keywords, category, and count
          * @param {*} [options] Override http request option.
@@ -304,7 +310,7 @@ export const ProductNameGeneratorApiFactory = function (configuration?: Configur
             return localVarFp.generateProductName(generateNameRequest, options).then((request) => request(axios, basePath));
         },
         /**
-         * Generate product names using query parameters for easy testing
+         * Generate creative product names using simple query parameters instead of JSON body. Ideal for quick testing and integration with GET-based systems.
          * @summary Generate product names (simple)
          * @param {string} [keywords] Comma-separated keywords
          * @param {string} [category] Product category
@@ -316,7 +322,7 @@ export const ProductNameGeneratorApiFactory = function (configuration?: Configur
             return localVarFp.generateSimpleProductName(keywords, category, count, options).then((request) => request(axios, basePath));
         },
         /**
-         * Returns list of supported product categories
+         * Returns complete list of supported product categories that can be used for name generation (electronics, clothing, food, books, sports, home)
          * @summary Get available categories
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -325,7 +331,7 @@ export const ProductNameGeneratorApiFactory = function (configuration?: Configur
             return localVarFp.getAvailableCategories(options).then((request) => request(axios, basePath));
         },
         /**
-         * Simple health check endpoint
+         * Returns service health status to verify that the product name generator service is running and accessible
          * @summary Health check
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -343,7 +349,7 @@ export const ProductNameGeneratorApiFactory = function (configuration?: Configur
  */
 export interface ProductNameGeneratorApiInterface {
     /**
-     * Generate creative product names based on keywords and category
+     * Generate creative product names using advanced algorithms based on provided keywords, category, and desired count. Returns suggestions with category-specific prefixes and suffixes.
      * @summary Generate product names
      * @param {GenerateNameRequest} generateNameRequest Request containing keywords, category, and count
      * @param {*} [options] Override http request option.
@@ -353,7 +359,7 @@ export interface ProductNameGeneratorApiInterface {
     generateProductName(generateNameRequest: GenerateNameRequest, options?: RawAxiosRequestConfig): AxiosPromise<GenerateNameResponse>;
 
     /**
-     * Generate product names using query parameters for easy testing
+     * Generate creative product names using simple query parameters instead of JSON body. Ideal for quick testing and integration with GET-based systems.
      * @summary Generate product names (simple)
      * @param {string} [keywords] Comma-separated keywords
      * @param {string} [category] Product category
@@ -365,7 +371,7 @@ export interface ProductNameGeneratorApiInterface {
     generateSimpleProductName(keywords?: string, category?: string, count?: number, options?: RawAxiosRequestConfig): AxiosPromise<GenerateNameResponse>;
 
     /**
-     * Returns list of supported product categories
+     * Returns complete list of supported product categories that can be used for name generation (electronics, clothing, food, books, sports, home)
      * @summary Get available categories
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -374,7 +380,7 @@ export interface ProductNameGeneratorApiInterface {
     getAvailableCategories(options?: RawAxiosRequestConfig): AxiosPromise<Array<string>>;
 
     /**
-     * Simple health check endpoint
+     * Returns service health status to verify that the product name generator service is running and accessible
      * @summary Health check
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -392,7 +398,7 @@ export interface ProductNameGeneratorApiInterface {
  */
 export class ProductNameGeneratorApi extends BaseAPI implements ProductNameGeneratorApiInterface {
     /**
-     * Generate creative product names based on keywords and category
+     * Generate creative product names using advanced algorithms based on provided keywords, category, and desired count. Returns suggestions with category-specific prefixes and suffixes.
      * @summary Generate product names
      * @param {GenerateNameRequest} generateNameRequest Request containing keywords, category, and count
      * @param {*} [options] Override http request option.
@@ -404,7 +410,7 @@ export class ProductNameGeneratorApi extends BaseAPI implements ProductNameGener
     }
 
     /**
-     * Generate product names using query parameters for easy testing
+     * Generate creative product names using simple query parameters instead of JSON body. Ideal for quick testing and integration with GET-based systems.
      * @summary Generate product names (simple)
      * @param {string} [keywords] Comma-separated keywords
      * @param {string} [category] Product category
@@ -418,7 +424,7 @@ export class ProductNameGeneratorApi extends BaseAPI implements ProductNameGener
     }
 
     /**
-     * Returns list of supported product categories
+     * Returns complete list of supported product categories that can be used for name generation (electronics, clothing, food, books, sports, home)
      * @summary Get available categories
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -429,7 +435,7 @@ export class ProductNameGeneratorApi extends BaseAPI implements ProductNameGener
     }
 
     /**
-     * Simple health check endpoint
+     * Returns service health status to verify that the product name generator service is running and accessible
      * @summary Health check
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}

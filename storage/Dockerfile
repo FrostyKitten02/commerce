@@ -30,8 +30,8 @@ RUN mkdir -p uploads
 # Copy binary from builder stage
 COPY --from=builder /app/storage .
 
-# Copy docs if they exist
-COPY --from=builder /app/docs ./docs 2>/dev/null || :
+# Copy docs directory (commented out - create if needed)
+# COPY --from=builder /app/docs ./docs
 
 # Expose port
 EXPOSE 8003

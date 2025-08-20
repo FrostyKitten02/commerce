@@ -36,7 +36,6 @@ import si.afridau.commerce.auth.request.RegisterRequest;
 import si.afridau.commerce.auth.response.LoginResponse;
 import si.afridau.commerce.auth.service.JwtService;
 
-@CrossOrigin
 @RestController
 @RequestMapping("auth")
 @RequiredArgsConstructor

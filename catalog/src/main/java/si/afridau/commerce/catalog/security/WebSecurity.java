@@ -48,6 +48,8 @@ public class WebSecurity {
                             .requestMatchers("/docs.yaml").permitAll()
                             .requestMatchers("/products/list").permitAll()
                             .requestMatchers(HttpMethod.GET,"/products/**").permitAll()
+                            .requestMatchers("/api/products/list").permitAll()
+                            .requestMatchers(HttpMethod.GET,"/api/products/**").permitAll()
                             .requestMatchers("/actuator/health").permitAll()
                             .requestMatchers("/actuator/info").permitAll()
                             .anyRequest().authenticated();
@@ -77,9 +79,10 @@ public class WebSecurity {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.applyPermitDefaultValues();
-        configuration.setAllowedOrigins(List.of("*"));
+        configuration.setAllowedOriginPatterns(List.of("*"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"));
+        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**",configuration);
         return source;

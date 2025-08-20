@@ -44,7 +44,6 @@ import java.util.UUID;
 //TODO add permissions for actions!!! don't only look for ADMIN role
 
 @Validated
-@CrossOrigin
 @RestController
 @RequestMapping("products")
 @RequiredArgsConstructor

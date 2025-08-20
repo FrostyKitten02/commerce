@@ -7,11 +7,17 @@ servers:
   description: Generated server url
 security:
 - bearerAuth: []
+tags:
+- name: Checkout
+  description: Order checkout and management endpoints
 paths:
   /checkout/submit-cart:
     post:
       tags:
-      - checkout-controller
+      - Checkout
+      summary: Submit cart for checkout
+      description: Process the user's shopping cart and create an order with billing
+        and shipping information
       operationId: submitCart
       requestBody:
         content:
@@ -20,26 +26,51 @@ paths:
               $ref: "#/components/schemas/SubmitCartReq"
         required: true
       responses:
-        "200":
-          description: OK
+        "400":
+          description: Invalid checkout data or empty cart
           content:
             '*/*':
               schema:
                 $ref: "#/components/schemas/OrderCreatedRes"
+        "200":
+          description: Order created successfully
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/OrderCreatedRes"
+        "401":
+          description: Authentication required
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/OrderCreatedRes"
+      security:
+      - Bearer Authentication: []
   /checkout/orders:
     get:
       tags:
-      - checkout-controller
+      - Checkout
+      summary: Get user orders
+      description: Retrieve all orders placed by the current authenticated user with
+        order details and status
       operationId: getUserOrders
       responses:
         "200":
-          description: OK
+          description: Orders retrieved successfully
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/OrderDto"
+        "401":
+          description: Authentication required
           content:
             '*/*':
               schema:
                 type: array
                 items:
                   $ref: "#/components/schemas/OrderDto"
+      security:
+      - Bearer Authentication: []
 components:
   schemas:
     SubmitCartReq:
